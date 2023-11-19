@@ -11,6 +11,5 @@ import java.util.List;
 public class Cart {
     private Long id;
     private List<Product> cartList;
-    private int quantity;
-    private double finalCost;
+    private double finalPrice;
 }
