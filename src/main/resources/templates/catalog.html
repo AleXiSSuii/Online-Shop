@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog</title>
+    <style>
+        .cart-icon {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<div class="cart-icon" onclick="location.href='/cart'">&#128722;</div>
+<body>
+<div th:each="product :${products}">
+    <a th:href="@{/home/{id}(id= ${product.getId()})}"
+       th:text="${product.getName()+ ' ' + product.getDescription() + ' Price: ' + product.getPrice()}">product</a>
+</div>
+<br/>
+</body>
+</html>

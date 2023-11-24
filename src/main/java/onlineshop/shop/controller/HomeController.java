@@ -3,12 +3,19 @@ package onlineshop.shop.controller;
 import onlineshop.shop.model.Product;
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+
+
+
+@Controller
 @RequestMapping("/home")
 public class HomeController {
     private final ProductRepository productRepository;
@@ -19,18 +26,21 @@ public class HomeController {
     }
 
     @GetMapping
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public String getAll(Model model) {
+        model.addAttribute("products",productRepository.findAll());
+        return "catalog";
     }
 
+
     @GetMapping("/{id}")
-    public Product getForId(@PathVariable Long id){
+    public String getForId(@PathVariable Long id,Model model){
         Optional<Product> productPersonal = productRepository.findById(id);
         if(productPersonal.isPresent()){
             Product product = productPersonal.get();
-            return product;
+            model.addAttribute("product",product);
+            return "productForID";
         }else {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
         }
     }
 

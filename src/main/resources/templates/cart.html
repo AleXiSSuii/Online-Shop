@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .product-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .product-info {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:each="cartItem : ${cart}">
+    <div class="product-container">
+        <div class="product-info">
+            <span th:text="${cartItem.product.name}"></span>
+            <span>Price:</span>
+            <span th:text="${cartItem.price}"></span>
+            <span>Quantity:</span>
+            <span th:text="${cartItem.quantity}"></span>
+        </div>
+        <form th:action="@{/cart/edit}" method="Post">
+            <input type="hidden" name="_method" value="patch"/>
+            <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}" />
+            <input type="number" name="quantity" min="0" th:value="${cartItem.quantity}"/>
+            <input type="submit" value="Update quantity"/>
+        </form>
+        <form th:action="@{/cart/delete}" th:method="DELETE">
+            <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}" />
+            <input type="submit" value="Delete"/>
+        </form>
+    </div>
+</div>
+<form th:action="@{/cart/clear}" method="post">
+    <input type="submit" value="Clear"/>
+</form>
+<br/>
+</body>
+</html>
