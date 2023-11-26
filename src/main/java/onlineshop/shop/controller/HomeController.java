@@ -1,6 +1,8 @@
 package onlineshop.shop.controller;
 
+import onlineshop.shop.model.Category;
 import onlineshop.shop.model.Product;
+import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,18 +21,29 @@ import java.util.Optional;
 @RequestMapping("/home")
 public class HomeController {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public HomeController(ProductRepository productRepository) {
+    public HomeController(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping
-    public String getAll(Model model) {
-        model.addAttribute("products",productRepository.findAll());
+    public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model) {
+        List<Product> list;
+        System.out.println();
+        System.out.println(id);
+        System.out.println();
+        if (id == null) {
+            list = productRepository.findAll();
+        }else{
+            list = productRepository.findByCategory(id);
+        }
+        model.addAttribute("products", list);
+        model.addAttribute("categories",categoryRepository.findAll());
         return "catalog";
     }
-
 
     @GetMapping("/{id}")
     public String getForId(@PathVariable Long id,Model model){
@@ -44,29 +57,4 @@ public class HomeController {
         }
     }
 
-    @PostMapping("/add")
-    public Product create(@RequestBody Product product){
-        productRepository.save(product);
-        return product;
-    }
-    @DeleteMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id){
-        Optional<Product> productPersonal = productRepository.findById(id);
-        if(productPersonal.isPresent()){
-            productRepository.deleteById(id);
-            return "Product successfully deleted";
-        }else {
-            throw new IllegalArgumentException("products with id " + id + "doesn't exist");
-        }
-    }
-    @PatchMapping("/{id}")
-    public Product productEdit(@PathVariable Long id,@RequestBody Product setProduct){
-        Product productForEdit = productRepository.findById(id).orElseThrow(()->new IllegalStateException(
-                "person with id " + id + " does not exists"));;
-        productForEdit.setName(setProduct.getName());
-        productForEdit.setDescription(setProduct.getDescription());
-        productForEdit.setPrice(setProduct.getPrice());
-        productRepository.save(productForEdit);
-        return productForEdit;
-    }
 }

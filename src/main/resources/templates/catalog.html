@@ -11,13 +11,28 @@
             font-size: 30px;
             cursor: pointer;
         }
+        #category-select {
+            margin: 20px;
+        }
     </style>
 </head>
 <div class="cart-icon" onclick="location.href='/cart'">&#128722;</div>
 <body>
-<div th:each="product :${products}">
-    <a th:href="@{/home/{id}(id= ${product.getId()})}"
-       th:text="${product.getName()+ ' ' + product.getDescription() + ' Price: ' + product.getPrice()}">product</a>
+<div id="category-select">
+    <form th:action="@{/home}" method="get">
+        <select name="category">
+            <option value="">All Categories</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}">
+            </option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+</div>
+<div th:each="product : ${products}">
+    <a th:href="@{/home/{id}(id=${product.getId()})}"
+       th:text="${product.getName() + ' ' + product.getDescription() + ' Price: ' + product.getPrice()}">product</a>
 </div>
 <br/>
 </body>
