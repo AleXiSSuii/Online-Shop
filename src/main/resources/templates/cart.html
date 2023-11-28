@@ -37,7 +37,8 @@
         </form>
     </div>
 </div>
-<form th:action="@{/cart/clear}" method="post">
+<form th:action="@{/cart/clear}" method="Post">
+    <input type="hidden" name="_method" value="DELETE"/>
     <input type="submit" value="Clear"/>
 </form>
 <br/>

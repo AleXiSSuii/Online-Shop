@@ -5,7 +5,7 @@ import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Product;
 import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.CartRepository;
-import onlineshop.shop.repository.CustomerRepository;
+
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,18 +20,17 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/cart")
 public class CartController {
-    private CustomerRepository customerRepository;
+
     private CartRepository cartRepository;
     private ProductRepository productRepository;
     private CartItemRepository cartItemRepository;
 
     @Autowired
-    public CartController(CustomerRepository customerRepository,
+    public CartController(
                           CartRepository cartRepository,
                           ProductRepository productRepository,
                           CartItemRepository cartItemRepository
     ) {
-        this.customerRepository = customerRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
