@@ -30,6 +30,12 @@
         <button type="submit">Filter</button>
     </form>
 </div>
+<div>
+    <form th:action="@{/home/name}" method="get">
+        <input type="text" name="name" placeholder="Enter product name">
+        <button type="submit">Search</button>
+    </form>
+</div>
 <div th:each="product : ${products}">
     <a th:href="@{/home/{id}(id=${product.getId()})}"
        th:text="${product.getName() + ' ' + product.getDescription() + ' Price: ' + product.getPrice()}">product</a>

@@ -14,9 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-
-
-
 @Controller
 @RequestMapping("/home")
 public class HomeController {
@@ -48,6 +45,20 @@ public class HomeController {
     @GetMapping("/{id}")
     public String getForId(@PathVariable Long id,Model model){
         Optional<Product> productPersonal = productRepository.findById(id);
+        if(productPersonal.isPresent()){
+            Product product = productPersonal.get();
+            model.addAttribute("product",product);
+            return "productForID";
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+    }
+    @GetMapping("/name")
+    public String getForName(@RequestParam String name,Model model){
+        System.out.println(name);
+        Optional<Product> productPersonal = productRepository.findByName(name);
+        System.out.println(productPersonal.get().getName());
+        model.addAttribute("products", productRepository.findAll());
         if(productPersonal.isPresent()){
             Product product = productPersonal.get();
             model.addAttribute("product",product);

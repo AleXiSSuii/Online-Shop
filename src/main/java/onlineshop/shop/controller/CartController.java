@@ -5,7 +5,6 @@ import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Product;
 import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.CartRepository;
-import onlineshop.shop.repository.CustomerRepository;
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,18 +19,17 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/cart")
 public class CartController {
-    private CustomerRepository customerRepository;
-    private CartRepository cartRepository;
-    private ProductRepository productRepository;
-    private CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
+    private final ProductRepository productRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Autowired
-    public CartController(CustomerRepository customerRepository,
-                          CartRepository cartRepository,
-                          ProductRepository productRepository,
-                          CartItemRepository cartItemRepository
+    public CartController(
+            CartRepository cartRepository,
+            ProductRepository productRepository,
+            CartItemRepository cartItemRepository
     ) {
-        this.customerRepository = customerRepository;
+
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
@@ -60,7 +58,7 @@ public class CartController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "cart doesn`t exist");
         }
         Cart cart = cartOpt.get();
-        if(cart.getCartList().size()!=0){
+        if (cart.getCartList().size() != 0) {
             for (int i = 0; i < cart.getCartList().size(); i++) {
                 CartItem cartItem = cart.getCartList().get(i);
                 if (productOpt.get().getId().equals(cartItem.getProduct().getId())) {
@@ -85,43 +83,45 @@ public class CartController {
     }
 
     @DeleteMapping("/clear")
-    public String clearCart(){
+    public String clearCart() {
         Optional<Cart> cart = cartRepository.findById(4L);
         cart.get().getCartList().clear();
         cart.get().setFinalPrice(0);
-        for (int i = 0; i < cartItemRepository.count();i++){
+        for (int i = 0; i < cartItemRepository.count(); i++) {
             CartItem cartItem = cartItemRepository.findAll().get(i);
-            if(cartItem.getCart().getId()==cart.get().getId()){
+            if (cartItem.getCart().getId() == cart.get().getId()) {
                 cartItemRepository.delete(cartItem);
             }
         }
         return "redirect:/cart";
     }
+
     @DeleteMapping("/delete")
-    public String deleteCartItem(@RequestParam("cartItem_Id") Long cartItem_id){
+    public String deleteCartItem(@RequestParam("cartItem_Id") Long cartItem_id) {
         Optional<Cart> cart = cartRepository.findById(4L);
         CartItem cartItem = cartItemRepository.findById(cartItem_id).orElseThrow();
         List<CartItem> cartItemList = cart.get().getCartList();
-        if(cartItem.getQuantity()>1){
-            cartItem.setQuantity(cartItem.getQuantity()-1);
+        if (cartItem.getQuantity() > 1) {
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
             cartItem.setPrice(cartItem.getProduct().getPrice() * (cartItem.getQuantity()));
             cartItemRepository.save(cartItem);
             cart.get().setFinalPrice(cart.get().getCartList().stream().mapToDouble(p -> p.getPrice()).sum());
             cartRepository.save(cart.get());
-        }else {
+        } else {
             cartItemRepository.deleteById(cartItem_id);
             cart.get().setFinalPrice(0);
             cartRepository.save(cart.get());
         }
         return "redirect:/cart";
     }
+
     @PatchMapping("/edit")
     public String editQuantity(@RequestParam("cartItem_Id") Long cartItem_id,
-                               @RequestParam("quantity") int quantity){
+                               @RequestParam("quantity") int quantity) {
         Optional<Cart> cart = cartRepository.findById(4L);
         CartItem cartItem = cartItemRepository.findById(cartItem_id).orElseThrow();
         cartItem.setQuantity(quantity);
-        cartItem.setPrice(cartItem.getQuantity()*cartItem.getProduct().getPrice());
+        cartItem.setPrice(cartItem.getQuantity() * cartItem.getProduct().getPrice());
         cartItemRepository.save(cartItem);
         cart.get().setFinalPrice(cart.get().getCartList().stream().mapToDouble(p -> p.getPrice()).sum());
         cartRepository.save(cart.get());
