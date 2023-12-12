@@ -1,16 +1,19 @@
 package onlineshop.shop.controller;
 
-import onlineshop.shop.model.Category;
 import onlineshop.shop.model.Product;
+import onlineshop.shop.model.User;
 import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductRepository;
+import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,19 +22,18 @@ import java.util.Optional;
 public class HomeController {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public HomeController(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public HomeController(ProductRepository productRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping
-    public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model) {
+    public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model){
         List<Product> list;
-        System.out.println();
-        System.out.println(id);
-        System.out.println();
         if (id == null) {
             list = productRepository.findAll();
         }else{

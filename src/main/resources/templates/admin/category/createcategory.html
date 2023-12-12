@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>New product</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/admin/categories/create}" th:object="${category}">
+  <p>
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+  </p>
+  <input type="submit" value="Create!"/>
+</form>
+<a th:href="@{/admin/categories}"
+   th:text="Categories" ></a>
+</body>
+</html>

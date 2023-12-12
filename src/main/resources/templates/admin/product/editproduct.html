@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit product</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/admin/products/{id}(id=${product.id})}" th:object="${product}">
+    <p>
+        <label for="name">Enter name: </label>
+        <input type="text" th:field="*{name}" id="name"/>
+    </p>
+    <p>
+        <label for="description">Enter description: </label>
+        <input type="text" th:field="*{description}" id="description"/>
+    </p>
+    <p>
+        <label for="price">Enter price: </label>
+        <input type="text" th:field="*{price}" id="price"/>
+    </p>
+    <p>
+        <label for="category">Select category: </label>
+        <select name="category" id="category">
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}"
+                    th:selected="${category.id == product.category.id}">
+            </option>
+        </select>
+
+    </p>
+    <input type="submit" value="UPDATE!"/>
+</form>
+<form th:method="DELETE" th:action="@{/admin/products/delete/{id}(id=${product.id})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>

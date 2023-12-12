@@ -1,4 +1,4 @@
-package onlineshop.shop.security;
+package onlineshop.shop.service;
 
 import lombok.extern.slf4j.Slf4j;
 import onlineshop.shop.model.Cart;
@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,9 @@ public class UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cartRepository = cartRepository;
+    }
+    public List<User> allUsers(){
+        return userRepository.findAll();
     }
     public boolean createUser(User user){
         user.toString();
@@ -40,5 +44,22 @@ public class UserService {
     }
     public Optional<User> getUserByPrincipal(Principal principal){
         return userRepository.findByEmail(principal.getName());
+    }
+    public void updateUser(Long id,User user){
+        User updateUser = userRepository.findById(id).get();
+        updateUser.setName(user.getName());
+        updateUser.setLastname(user.getLastname());
+        updateUser.setEmail(user.getEmail());
+        updateUser.setNumber(user.getNumber());
+        updateUser.setStatus(user.getStatus());
+        updateUser.setRole(user.getRole());
+        userRepository.save(updateUser);
+    }
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
+    }
+    public User userForId(Long id){
+        User user = userRepository.findById(id).get();
+        return user;
     }
 }

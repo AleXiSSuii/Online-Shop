@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>person</title>
+</head>
+<body>
+<p th:text="${'id: ' + user.id}">VALUE</p>
+<p th:text="${user.name}">VALUE</p>
+<p th:text="${'surname: ' + user.lastname}">VALUE</p>
+<p th:text="${'Age: ' + user.number}">VALUE</p>
+<p th:text="${'Email: ' + user.email}">VALUE</p>
+<p th:text="${'Email: ' + user.status}">VALUE</p>
+<a th:href="@{/admin/users/edit/{id}(id=${user.id})}"
+   th:text=Редактировать></a>
+</body>
+</html>

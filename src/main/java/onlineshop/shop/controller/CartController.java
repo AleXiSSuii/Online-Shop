@@ -8,7 +8,6 @@ import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.CartRepository;
 import onlineshop.shop.repository.ProductRepository;
 import onlineshop.shop.repository.UserRepository;
-import onlineshop.shop.security.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,20 +29,19 @@ public class CartController {
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
+
 
     @Autowired
     public CartController(
             CartRepository cartRepository,
             ProductRepository productRepository,
             CartItemRepository cartItemRepository,
-            UserRepository userRepository, UserService userService) {
+            UserRepository userRepository) {
 
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
     }
 
     @GetMapping

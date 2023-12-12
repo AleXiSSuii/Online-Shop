@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All people</title>
+</head>
+<body>
+<div th:each="product :${products}">
+    <a th:href="@{/admin/products/{id}(id= ${product.id})}"
+       th:text="${product.name + 'price : ' + product.price + 'category: ' + product.category.name}">user</a>
+</div>
+<br/>
+<hr/>
+<a th:href="@{/admin/products/create}"
+   th:text=Create new product></a>
+
+</body>
+</html>
