@@ -8,6 +8,7 @@ import onlineshop.shop.model.enums.Role;
 import onlineshop.shop.model.enums.Status;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 public class User{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,5 +39,10 @@ public class User{
     @OneToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
 }

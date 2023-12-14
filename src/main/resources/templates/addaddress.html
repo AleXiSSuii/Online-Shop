@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New product</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/order/addAddress}" th:object="${address}">
+    <p>
+        <label for="state">Enter state: </label>
+        <input type="text" th:field="*{state}" id="state"/>
+    </p>
+    <p>
+        <label for="city">Enter city: </label>
+        <input type="text" th:field="*{city}" id="city"/>
+    </p>
+    <p>
+        <label for="street">Enter street: </label>
+        <input type="text" th:field="*{street}" id="street"/>
+    </p>
+    <p>
+        <label for="building">Enter building: </label>
+        <input type="text" th:field="*{building}" id="building"/>
+    </p>
+    <p>
+        <label for="apartment">Enter street: </label>
+        <input type="text" th:field="*{apartment}" id="apartment"/>
+    </p>
+    <p>
+        <label for="postalCode">Enter street: </label>
+        <input type="text" th:field="*{postalCode}" id="postalCode"/>
+    </p>
+    <br/>
+    <input type="submit" value="Create!"/>
+</form>
+<a th:href="@{/admin/products}"
+   th:text="Продукты" ></a>
+</body>
+</html>
+</html>

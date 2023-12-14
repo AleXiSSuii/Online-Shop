@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "cart")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +22,5 @@ public class Cart {
     private List<CartItem> cartList;
     @Column(name = "final_price")
     private double finalPrice;
+
 }
