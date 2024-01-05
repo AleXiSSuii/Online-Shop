@@ -2,6 +2,7 @@ package onlineshop.shop.controller;
 
 import onlineshop.shop.model.Address;
 import onlineshop.shop.model.User;
+import onlineshop.shop.service.EmailService;
 import onlineshop.shop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,6 +24,7 @@ public class OrderController {
     @Qualifier("orderService")
     @Autowired
     private OrderService orderService;
+
 
     @GetMapping("/addAddress")
     public String orderAddAddress(Model model, Address address){

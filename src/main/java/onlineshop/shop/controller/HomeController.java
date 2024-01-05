@@ -1,15 +1,12 @@
 package onlineshop.shop.controller;
 
 import onlineshop.shop.model.Product;
-import onlineshop.shop.model.User;
 import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductRepository;
 import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +29,15 @@ public class HomeController {
     }
 
     @GetMapping
-    public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model){
+    public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model, Authentication authentication){
         List<Product> list;
+        boolean isAdmin = false;
+        if(authentication != null){
+            isAdmin =  authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("developers:admin"));
+            System.out.println(isAdmin);
+            System.out.println(authentication.getAuthorities().toString());
+        }
         if (id == null) {
             list = productRepository.findAll();
         }else{
@@ -41,6 +45,7 @@ public class HomeController {
         }
         model.addAttribute("products", list);
         model.addAttribute("categories",categoryRepository.findAll());
+        model.addAttribute("isAdmin", isAdmin);
         return "catalog";
     }
 

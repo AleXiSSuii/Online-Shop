@@ -1,6 +1,6 @@
 package onlineshop.shop.service;
 
-import onlineshop.shop.controller.CartController;
+
 import onlineshop.shop.model.Address;
 import onlineshop.shop.model.Order;
 import onlineshop.shop.model.User;
@@ -8,11 +8,13 @@ import onlineshop.shop.repository.AddressRepository;
 import onlineshop.shop.repository.OrderRepository;
 import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -26,6 +28,9 @@ public class OrderService {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
     }
+    @Qualifier("emailService")
+    @Autowired
+    private EmailService emailService;
 
     public void addAddressToUser(Address address, Principal principal){
         User user = getUserOfPrincipal(principal);
@@ -60,6 +65,14 @@ public class OrderService {
         user.getOrders().add(order);
         orderRepository.save(order);
         userRepository.save(user);
+        emailService.sendOrderConfirmation(user.getEmail(),order);
+    }
 
+    public void deleteAllOrdersForUser(User user){
+        List<Order> ordersList = user.getOrders();
+        for(int i = 0; i < ordersList.size(); i++){
+            orderRepository.deleteById(ordersList.get(i).getId());
+        }
+        user.getOrders().clear();
     }
 }

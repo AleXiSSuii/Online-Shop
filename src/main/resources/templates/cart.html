@@ -13,9 +13,53 @@
         .product-info {
             margin-right: 20px;
         }
+        .cart-icon {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .home-link a {
+            content: '🏠';
+            position: absolute;
+            left: -35px;
+            font-size: 24px;
+        }
+        body {
+            margin: 0;
+             padding-top: 70px;
+            font-family: Arial, sans-serif;
+        }
+        .top-bar {
+            position: fixed;
+            left: 20px;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff; /* Add a background to lift the bar above page content */
+            padding: 10px 20px; /* Add some padding around the elements */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Add slight shadow for better visibility */
+            z-index: 10; /* Ensure it's above other items */
+        }
+        .cart-icon, .home-icon {
+            font-size: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
     </style>
 </head>
 <body>
+<div class="top-bar">
+    <div class="home-icon">
+        <a href="/" th:href="@{/home}">&#127968;</a> <!-- Updated to use house emoji for the home icon -->
+    </div>
+    <div class="cart-icon" onclick="location.href='/cart'">&#128722;</div> <!-- Cart Icon -->
+</div>
+<br/>
 <div th:each="cartItem : ${cart}">
     <div class="product-container">
         <div class="product-info">
@@ -40,6 +84,9 @@
 <form th:action="@{/cart/clear}" method="post">
     <input type="hidden" name="_method" value="DELETE"/>
     <input type="submit" value="Clear"/>
+</form>
+<form th:action="@{/order}" method="get">
+    <input type="submit" value="Place an order"/>
 </form>
 <br/>
 </body>
