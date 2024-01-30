@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -74,5 +76,19 @@ public class OrderService {
             orderRepository.deleteById(ordersList.get(i).getId());
         }
         user.getOrders().clear();
+    }
+    public List<Order> orderList(){
+        return orderRepository.findAll();
+    }
+
+    public List<Order> allOrdersForUser(Long id) {
+        List<Order> allOrders = new ArrayList<>();
+        for (long i = 0; i < orderRepository.count(); i++) {
+            Optional<Order> orderOptional = orderRepository.findById(i);
+            if (orderOptional.isPresent() && orderOptional.get().getUser().getId() == id) {
+                allOrders.add(orderOptional.get());
+            }
+        }
+        return allOrders;
     }
 }

@@ -5,18 +5,28 @@
     <title>New product</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/products/create}" th:object="${product}">
+<form th:method="POST" th:action="@{/admin/products/create}" th:object="${product}" enctype="multipart/form-data">
     <p>
         <label for="name">Enter name: </label>
         <input type="text" th:field="*{name}" id="name"/>
     </p>
     <p>
-        <label for="description">Enter lastname: </label>
+        <label for="description">Enter description: </label>
         <input type="text" th:field="*{description}" id="description"/>
     </p>
     <p>
-        <label for="price">Enter phone: </label>
+        <label for="price">Enter price: </label>
         <input type="text" th:field="*{price}" id="price"/>
+    </p>
+    <p>
+        <label for="image1">Preview photo: </label>
+        <input type="file" name="image1" id="image1" />
+    </p>
+    <p>
+        <input type="file" name="image2" />
+    </p>
+    <p>
+        <input type="file" name="image3" />
     </p>
     <p>
         <select name="category" id="category">

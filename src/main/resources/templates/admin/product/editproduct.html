@@ -5,7 +5,7 @@
     <title>Edit product</title>
 </head>
 <body>
-<form th:method="PATCH" th:action="@{/admin/products/{id}(id=${product.id})}" th:object="${product}">
+<form th:method="PATCH" th:action="@{/admin/products/{id}(id=${product.id})}" th:object="${product}" enctype="multipart/form-data">
     <p>
         <label for="name">Enter name: </label>
         <input type="text" th:field="*{name}" id="name"/>
@@ -27,7 +27,9 @@
                     th:selected="${category.id == product.category.id}">
             </option>
         </select>
-
+    </p>
+    <p>
+        <input type="file" name="image" />
     </p>
     <input type="submit" value="UPDATE!"/>
 </form>

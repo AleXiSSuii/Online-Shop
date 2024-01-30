@@ -3,8 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Order Details</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end; 
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+        text-decoration: none;
+        color: white;
+        cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex; /* Или просто 'flex' */
+            align-items: center; /* Центрируем элементы по вертикали */
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
+    </div>
+    <div class="auth-links">
+        <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
+        <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
+        <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
+</div>
 <div>
     <h2>Order Details</h2>
 

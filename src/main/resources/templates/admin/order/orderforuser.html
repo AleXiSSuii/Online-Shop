@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Имя заказчика</th>
+                <th>Фамилия заказчика</th>
+                <th>Номер заказчика</th>
+                <th>Email заказчика</th>
+            </tr>
+            </thead>
+            <tbody>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.lastname}"></td>
+                <td th:text="${user.number}"></td>
+                <td th:text="${user.email}"></td>
+            </tbody>
+    </table>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Область</th>
+                <th>Город</th>
+                <th>Улица</th>
+                <th>Номер дома</th>
+                <th>Квартира</th>
+                <th>Индекс</th>
+            </tr>
+            </thead>
+            <tbody>
+                <td th:text="${user.address.state}"></td>
+                <td th:text="${user.address.city}"></td>
+                <td th:text="${user.address.street}"></td>
+                <td th:text="${user.address.building}"></td>
+                <td th:text="${user.address.apartment}"></td>
+                <td th:text="${user.address.postalCode}"></td>
+            </tbody>
+    </table>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Название товара</th>
+            <th>Количество</th>
+            <th>Цена</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.cart.cartList[0].product.name}"></td>
+            <td th:text="${order.cart.cartList[0].quantity}"></td>
+            <td th:text="${order.cart.cartList[0].price}"></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

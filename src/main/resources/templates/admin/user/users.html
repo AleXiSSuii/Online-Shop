@@ -5,13 +5,46 @@
     <title>All people</title>
 </head>
 <body>
-<div th:each="user :${users}">
-    <a th:href="@{/admin/users/{id}(id= ${user.getId()})}"
-       th:text="${user.name + 'lastname: ' + user.lastname + 'email: ' + user.email}">user</a>
-</div>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Номер телефона</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Роли</th>
+            <th>Статус</th>
+            <th>Редактирование</th>
+            <th>Подробная информация</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.number}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.role}"></td>
+            <td>
+                <div th:if="${user.role != 'ADMIN'}">
+                    <form th:action="@{/admin/users/ban/{id}(id=${user.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" th:text="${user.status}">Ban/Activate</button>
+                    </form>
+                </div>
+            </td>
+            <td>
+                <a th:href="@{/admin/users/edit/{id}(id=${user.id})}">Edit</a>
+            </td>
+            <td>
+                <!-- Assuming you have a detailed view of a user -->
+                <a th:href="@{/admin/users/{id}(id=${user.id})}">Details</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <br/>
 <hr/>
-<a href="//">Create new person</a>
-
+<a href="/">Create new person</a>
 </body>
 </html>

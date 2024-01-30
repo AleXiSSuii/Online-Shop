@@ -1,8 +1,10 @@
 package onlineshop.shop.controller;
 
 import onlineshop.shop.model.Category;
+import onlineshop.shop.model.Order;
 import onlineshop.shop.model.Product;
 import onlineshop.shop.model.User;
+import onlineshop.shop.service.OrderService;
 import onlineshop.shop.service.ProductService;
 import onlineshop.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,7 +28,8 @@ public class AdminController {
     @Autowired
     @Qualifier("productService")
     private ProductService productService;
-
+    @Autowired
+    private OrderService orderService;
     @GetMapping
     public String adminMenu(){
         return "/admin/menu";
@@ -50,8 +55,11 @@ public class AdminController {
     }
 
     @PostMapping("/products/create")
-    public String create(Product product) {
-        productService.createProduct(product);
+    public String create(Product product,
+                         @RequestParam("image1") MultipartFile file1,
+                         @RequestParam("image2") MultipartFile file2,
+                         @RequestParam("image3") MultipartFile file3) throws IOException {
+        productService.createProduct(product,file1,file2,file3);
         return "redirect:/admin/products";
     }
 
@@ -60,6 +68,7 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/products";
     }
+
 
     @GetMapping("/products/edit/{id}")
     public String editPage(Model model, @PathVariable("id") Long id) {
@@ -70,8 +79,12 @@ public class AdminController {
     }
 
     @PatchMapping("/products/{id}")
-    public String productEdit(@ModelAttribute("product") Product product, @PathVariable("id") Long id) {
-        productService.updateProduct(id, product);
+    public String productEdit(@ModelAttribute("product") Product product,
+                              @PathVariable("id") Long id,
+                              @RequestParam("image") MultipartFile file1
+                              ) throws IOException {
+
+        productService.updateProduct(id, product, file1);
         return "redirect:/admin/products";
     }
 
@@ -100,6 +113,11 @@ public class AdminController {
         userService.updateUser(id, user);
         return "redirect:/admin/users";
 
+    }
+    @PostMapping("users/ban/{id}")
+    public String userBan(@PathVariable("id") Long id) {
+        userService.banUser(id);
+        return "redirect:/admin/users";
     }
 
     @DeleteMapping("/users/delete/{id}")
@@ -143,4 +161,22 @@ public class AdminController {
         productService.deleteCategory(id);
         return "redirect:/admin/categories";
     }
+
+    @GetMapping("/orders")
+    public String ordersMenu(Model model){
+        model.addAttribute("orders", orderService.orderList());
+        return "/admin/order/orders";
+    }
+    @GetMapping("/orders/{id}")
+    public String orderForUser(@PathVariable("id") Long id ,Model model){
+        model.addAttribute("user", userService.userForId(id));
+        model.addAttribute("orders", orderService.allOrdersForUser(id));
+        List<Order> order = orderService.allOrdersForUser(id);
+        System.out.println();
+        System.out.println(order.get(0).getCart().getCartList().get(0).getProduct().getName());
+        System.out.println(order.get(0).getCart().getCartList().get(0).getPrice());
+        System.out.println();
+        return "/admin/order/orderForUser";
+    }
+
 }

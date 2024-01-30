@@ -1,6 +1,7 @@
 package onlineshop.shop.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.User;
 import onlineshop.shop.service.EmailService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,14 +36,16 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String registration(Model model){
-        model.addAttribute("user", new User());
+    public String registration(@ModelAttribute("user") User user){
         return "registration";
     }
     @PostMapping("/registration")
-    public String createUser(@ModelAttribute("user") User user, HttpServletRequest request) {
+    public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, HttpServletRequest request) {
         System.out.println(user.getPassword().toString());
         String password = user.getPassword();
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
         if (!userService.createUser(user)) {
             return "registration";
         }

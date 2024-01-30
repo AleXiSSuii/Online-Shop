@@ -13,51 +13,75 @@
         .product-info {
             margin-right: 20px;
         }
-        .cart-icon {
-            position: fixed;
-            right: 20px;
-            top: 20px;
-            font-size: 30px;
-            cursor: pointer;
-        }
-        .home-link a {
-            content: '🏠';
-            position: absolute;
-            left: -35px;
-            font-size: 24px;
-        }
         body {
             margin: 0;
-             padding-top: 70px;
             font-family: Arial, sans-serif;
         }
-        .top-bar {
-            position: fixed;
-            left: 20px;
-            right: 20px;
-            top: 20px;
+        .header-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #fff; /* Add a background to lift the bar above page content */
-            padding: 10px 20px; /* Add some padding around the elements */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Add slight shadow for better visibility */
-            z-index: 10; /* Ensure it's above other items */
+            background-color: #1E90FF; /* Измените на желаемый цвет */
+            color: white; /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
         }
-        .cart-icon, .home-icon {
-            font-size: 30px;
-            cursor: pointer;
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
             text-decoration: none;
-            color: black;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end; 
         }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+        text-decoration: none;
+        color: white;
+        cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <div class="home-icon">
-        <a href="/" th:href="@{/home}">&#127968;</a> <!-- Updated to use house emoji for the home icon -->
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
     </div>
-    <div class="cart-icon" onclick="location.href='/cart'">&#128722;</div> <!-- Cart Icon -->
+    <div class="auth-links">
+        <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
+        <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
+        <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
 </div>
 <br/>
 <div th:each="cartItem : ${cart}">

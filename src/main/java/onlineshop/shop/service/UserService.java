@@ -104,5 +104,19 @@ public class UserService {
         Authentication authenticatedUser = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
     }
+    public void banUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            if (user.getStatus().equals(Status.ACTIVE)) {
+                user.setStatus(Status.BANNED);
+            } else {
+                user.setStatus(Status.ACTIVE);
+            }
+        }
+        userRepository.save(user);
+    }
 
 }

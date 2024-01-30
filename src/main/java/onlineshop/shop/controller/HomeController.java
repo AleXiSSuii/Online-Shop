@@ -1,6 +1,7 @@
 package onlineshop.shop.controller;
 
 import onlineshop.shop.model.Product;
+import onlineshop.shop.model.ProductImage;
 import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductRepository;
 import onlineshop.shop.repository.UserRepository;
@@ -31,6 +32,7 @@ public class HomeController {
     @GetMapping
     public String getAll(@RequestParam(value = "category", required = false) Integer id, Model model, Authentication authentication){
         List<Product> list;
+        String previewImageUrl = "";
         boolean isAdmin = false;
         if(authentication != null){
             isAdmin =  authentication.getAuthorities().stream()
@@ -43,6 +45,16 @@ public class HomeController {
         }else{
             list = productRepository.findByCategory(id);
         }
+        for (Product product : list) {
+            if (product.getImages() != null && !product.getImages().isEmpty()) {
+                ProductImage image = product.getImages().get(0);
+                if(image.isPreviewImage()){
+                    previewImageUrl = "/images/" + image.getId();
+                }
+            }
+            product.setPreviewImageUrl(previewImageUrl);
+        }
+
         model.addAttribute("products", list);
         model.addAttribute("categories",categoryRepository.findAll());
         model.addAttribute("isAdmin", isAdmin);
@@ -55,6 +67,7 @@ public class HomeController {
         if(productPersonal.isPresent()){
             Product product = productPersonal.get();
             model.addAttribute("product",product);
+            model.addAttribute("images", product.getImages());
             return "productForID";
         }else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
@@ -74,5 +87,4 @@ public class HomeController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
         }
     }
-
 }

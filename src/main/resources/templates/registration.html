@@ -3,33 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <title>New person</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .registration-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 300px;
+        }
+        .registration-container h2 {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .registration-form input[type=text], 
+        .registration-form input[type=password], 
+        .registration-form input[type=tel], 
+        .registration-form input[type=email] {
+            padding: 10px;
+            width: 275px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .registration-form input[type=submit] {
+            padding: 10px;
+            color: white;
+            background-color: #5cabff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .registration-form input[type=submit]:hover {
+            background-color: #4a95e4;
+        }
+        .auth-links a, .log-in-link a {
+            color: #5cabff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+        }
+        .error-msg {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<form th:method="POST" th:action="@{/registration}" th:object="${user}">
-    <p>
-        <label for="name">Enter name: </label>
-        <input type="text" th:field="*{name}" id="name"/>
-    </p>
-    <p>
-        <label for="lastname">Enter lastname: </label>
-        <input type="text" th:field="*{lastname}" id="lastname"/>
-    </p>
-    <p>
-        <label for="number">Enter phone: </label>
-        <input type="text" th:field="*{number}" id="number"/>
-    </p>
-    <p>
-        <label for="email">Enter e-mail: </label>
-        <input type="text" th:field="*{email}" id="email"/>
-    </p>
-    <p>
-        <label for="password">Enter Password: </label>
-        <input type="password" name="password" id="password"/>
-    </p>
-    <br/>
-    <input type="submit" value="Create!"/>
-</form>
-<a th:href="@{/home}"
-   th:text="Войти" ></a>
+<div class="registration-container">
+    <h2>Регистрация</h2>
+    <form th:action="@{/registration}" method="post" class="registration-form" th:object="${user}">
+        <div>
+            <input type="email" th:field="*{email}" placeholder="E-mail" id="email"/>
+            <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+        </div>
+        <div>
+            <input type="text" th:field="*{name}" placeholder="Имя" id="name"/>
+            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+        </div>
+        <div>
+            <input type="text" th:field="*{lastname}" placeholder="Фамилия" id="lastname"/>
+            <div style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Surname error</div>
+        </div>
+        <div>
+            <input type="tel" th:field="*{number}" placeholder="Телефон" id="number"/>
+            <div style="color:red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number error</div>
+        </div>
+        <div>
+            <input type="password" th:field="*{password}" placeholder="Пароль" id="password"/>
+        </div>
+        <input type="submit" value="Создать аккаунт" />
+    </form>
+    <div class="log-in-link">
+        <a href="/login">Вход в систему</a>
+    </div>
+    <p th:if="${param.error}" class="error-msg">Ошибка при регистрации</p>
+</div>
 </body>
 </html>
