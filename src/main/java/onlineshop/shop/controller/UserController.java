@@ -7,10 +7,7 @@ import onlineshop.shop.model.User;
 import onlineshop.shop.service.EmailService;
 import onlineshop.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class UserController {
 
-    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-
     @Autowired
     private UserService userService;
 
-    @Qualifier("emailService")
     @Autowired
     private EmailService emailService;
 
@@ -41,7 +35,7 @@ public class UserController {
     }
     @PostMapping("/registration")
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, HttpServletRequest request) {
-        System.out.println(user.getPassword().toString());
+
         String password = user.getPassword();
         if (bindingResult.hasErrors()) {
             return "registration";

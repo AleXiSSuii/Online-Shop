@@ -3,15 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <title>person</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1E90FF;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-<p th:text="${'id: ' + user.id}">VALUE</p>
-<p th:text="${user.name}">VALUE</p>
-<p th:text="${'surname: ' + user.lastname}">VALUE</p>
-<p th:text="${'Age: ' + user.number}">VALUE</p>
-<p th:text="${'Email: ' + user.email}">VALUE</p>
-<p th:text="${'Email: ' + user.status}">VALUE</p>
-<a th:href="@{/admin/users/edit/{id}(id=${user.id})}"
-   th:text=Редактировать></a>
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
+    </div>
+    <div class="auth-links">
+        <a th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div style="text-align: center;">
+    <h1 style="font-family: Arial, sans-serif; font-size: 20px;">Данные о заказчике</h>
+</div>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>E-mail</th>
+            <th>Номер телефона</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Роли</th>
+            <th>Статус</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.number}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.role}"></td>
+            <td th:text="${user.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${user.address != null}">
+    <div style="text-align: center;">
+        <h1 style="font-family: Arial, sans-serif; font-size: 20px;">Адрес заказчика</h>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Область</th>
+            <th>Город</th>
+            <th>Улица</th>
+            <th>Номер дома</th>
+            <th>Квартира</th>
+            <th>Индекс</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${user.address.state}"></td>
+            <td th:text="${user.address.city}"></td>
+            <td th:text="${user.address.street}"></td>
+            <td th:text="${user.address.building}"></td>
+            <td th:text="${user.address.apartment}"></td>
+            <td th:text="${user.address.postalCode}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

@@ -2,39 +2,95 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New product</title>
+    <title>New address</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 300px;
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form input[type=text], 
+        .form input[type=password], 
+        .form input[type=tel], 
+        .form input[type=email] {
+            padding: 10px;
+            width: 275px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form input[type=submit] {
+            padding: 10px;
+            color: white;
+            background-color: #5cabff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .form input[type=submit]:hover {
+            background-color: #4a95e4;
+        }
+        .form-links a {
+            color: #5cabff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+        }
+        .error-msg {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<form th:method="POST" th:action="@{/order/addAddress}" th:object="${address}">
-    <p>
-        <label for="state">Enter state: </label>
-        <input type="text" th:field="*{state}" id="state"/>
-    </p>
-    <p>
-        <label for="city">Enter city: </label>
-        <input type="text" th:field="*{city}" id="city"/>
-    </p>
-    <p>
-        <label for="street">Enter street: </label>
-        <input type="text" th:field="*{street}" id="street"/>
-    </p>
-    <p>
-        <label for="building">Enter building: </label>
-        <input type="text" th:field="*{building}" id="building"/>
-    </p>
-    <p>
-        <label for="apartment">Enter street: </label>
-        <input type="text" th:field="*{apartment}" id="apartment"/>
-    </p>
-    <p>
-        <label for="postalCode">Enter street: </label>
-        <input type="text" th:field="*{postalCode}" id="postalCode"/>
-    </p>
-    <br/>
-    <input type="submit" value="Create!"/>
-</form>
-<a th:href="@{/admin/products}"
-   th:text="Продукты" ></a>
+<div class="form-container">
+    <h2>Добавить адрес</h2>
+    <form th:action="@{/order/addAddress}" method="post" class="form" th:object="${address}">
+        <div>
+            <input type="text" th:field="*{state}" placeholder="Область" id="state"/>
+        </div>
+        <div>
+            <input type="text" th:field="*{city}" placeholder="Город" id="city"/>
+        </div>
+        <div>
+            <input type="text" th:field="*{street}" placeholder="Улица" id="street"/>
+        </div>
+        <div>
+            <input type="text" th:field="*{building}" placeholder="Номер дома" id="building"/>
+        </div>
+        <div>
+            <input type="text" th:field="*{apartment}" placeholder="Квартира" id="apartment"/>
+        </div>
+        <div>
+            <input type="text" th:field="*{postalCode}" placeholder="Индекс" id="postalCode"/>
+        </div>
+        <br/>
+        <input type="submit" value="Создать!"/>
+    </form>
+    <div class="form-links">
+        <a href="/home">Продукты</a>
+    </div>
+</div>
 </body>
-</html>
 </html>

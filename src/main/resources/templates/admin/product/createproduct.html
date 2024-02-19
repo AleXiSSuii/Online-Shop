@@ -3,43 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <title>New product</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end; 
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+        text-decoration: none;
+        color: white;
+        cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
-<form th:method="POST" th:action="@{/admin/products/create}" th:object="${product}" enctype="multipart/form-data">
-    <p>
-        <label for="name">Enter name: </label>
-        <input type="text" th:field="*{name}" id="name"/>
-    </p>
-    <p>
-        <label for="description">Enter description: </label>
-        <input type="text" th:field="*{description}" id="description"/>
-    </p>
-    <p>
-        <label for="price">Enter price: </label>
-        <input type="text" th:field="*{price}" id="price"/>
-    </p>
-    <p>
-        <label for="image1">Preview photo: </label>
-        <input type="file" name="image1" id="image1" />
-    </p>
-    <p>
-        <input type="file" name="image2" />
-    </p>
-    <p>
-        <input type="file" name="image3" />
-    </p>
-    <p>
-        <select name="category" id="category">
-            <option th:each="category : ${categories}"
-                    th:value="${category.id}"
-                    th:text="${category.name}">
-            </option>
-        </select>
-    </p>
-    <br/>
-    <input type="submit" value="Create!"/>
-</form>
-<a th:href="@{/admin/products}"
-   th:text="Продукты" ></a>
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
+    </div>
+    <div class="auth-links">
+        <a th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div style="text-align: center;">
+    <h3 style="font-family: Arial, sans-serif; font-size: 20px;">Создать новый продукт</h3>
+</div>
+<div style="background-color: #f2f2f2; padding: 20px; border-radius: 5px;  display: flex; flex-direction: row; align-items: center;">
+    <form th:method="POST" th:action="@{/admin/products/create}" th:object="${product}" enctype="multipart/form-data">
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="name">Название продукта</label>
+            <input type="text" name="name" id="name" style="width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="description">Описание продукта</label>
+            <textarea name="description" id="description" style="width: 300px; height: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="price">Цена продукта</label>
+            <input type="text" name="price" id="price" style="width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="quantity">Количество</label>
+            <input type="text" name="quantity" id="quantity" style="width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="category">Категория для продукта</label>
+            <select name="category" id="category" style="width: 320px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="image1">Превью картинка</label>
+            <input type="file" name="image1" id="image1" style="margin-top: 5px;">
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="image2">Картинка 2</label>
+            <input type="file" name="image2" id="image2" style="margin-top: 5px;">
+        </div>
+        <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+            <label for="image3">Картинка 3</label>
+            <input type="file" name="image3" id="image3" style="margin-top: 5px;">
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+            <input type="submit" value="СОХРАНИТЬ" style="background-color: #1E90FF; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 120px;">
+        </div>
+    </form>
+</div>
 </body>
 </html>

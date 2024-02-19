@@ -72,12 +72,12 @@
             <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
         </div>
         <div>
-            <input type="text" th:field="*{name}" placeholder="Имя" id="name"/>
-            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
-        </div>
-        <div>
             <input type="text" th:field="*{lastname}" placeholder="Фамилия" id="lastname"/>
             <div style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Surname error</div>
+        </div>
+        <div>
+            <input type="text" th:field="*{name}" placeholder="Имя" id="name"/>
+            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
         </div>
         <div>
             <input type="tel" th:field="*{number}" placeholder="Телефон" id="number"/>

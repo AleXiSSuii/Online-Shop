@@ -3,16 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <title>All people</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+
+            text-align: left;
+        }
+
+        th {
+            background-color: #1E90FF;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }.new-product{
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Добавляем стиль для ссылки */
+            margin-left: 10px;
+            display: inline-block; /* Добавляем стиль для ссылки */
+        }.delete-product{
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-<div th:each="product :${products}">
-    <a th:href="@{/admin/products/{id}(id= ${product.id})}"
-       th:text="${product.name + 'price : ' + product.price + 'category: ' + product.category.name}">user</a>
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
+    </div>
+    <div class="auth-links">
+        <a th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
 </div>
+<div style="text-align: center;">
+    <h1 style="font-family: Arial, sans-serif; font-size: 20px;">Продукты</h1>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Название продукта</th>
+        <th>Цена продукта</th>
+        <th>Категория продукта</th>
+        <th>Количество продукта</th>
+        <th>Удалить продукт</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product :${products}">
+        <td >
+            <a th:text="${product.name}" th:href="@{/admin/products/edit/{id}(id=${product.id})}"></a>
+        </td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.category.name}"></td>
+        <td th:text="${product.quantity}"></td>
+        <td>
+            <form th:method="DELETE" th:action="@{/admin/products/delete/{id}(id=${product.id})}" >
+                <input type="submit" value="УДАЛИТЬ" class="delete-product">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 <br/>
-<hr/>
-<a th:href="@{/admin/products/create}"
-   th:text=Create new product></a>
-
+<a th:href="@{/admin/products/create}" class="new-product">Создать новый продукт</a>
 </body>
 </html>

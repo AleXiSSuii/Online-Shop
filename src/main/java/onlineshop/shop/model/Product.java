@@ -22,6 +22,8 @@ public class Product {
     private String description;
     @Column(name = "price")
     private double price;
+    @Column(name = "quantity")
+    private Integer quantity;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

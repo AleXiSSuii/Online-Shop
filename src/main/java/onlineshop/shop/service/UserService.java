@@ -1,7 +1,9 @@
 package onlineshop.shop.service;
 
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import onlineshop.shop.model.Cart;
 import onlineshop.shop.model.User;
@@ -9,57 +11,27 @@ import onlineshop.shop.model.enums.Role;
 import onlineshop.shop.model.enums.Status;
 import onlineshop.shop.repository.CartRepository;
 import onlineshop.shop.repository.UserRepository;
-import onlineshop.shop.security.UserDetailsServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final CartRepository cartRepository;
-
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.cartRepository = cartRepository;
-    }
-
-    @Autowired
-    @Qualifier("userDetailsServiceImpl")
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    @Qualifier("orderService")
     private OrderService orderService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-
-
     public List<User> allUsers() {
-
         return userRepository.findAll();
     }
 
     public boolean createUser(User user) {
-        user.toString();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
@@ -71,12 +43,8 @@ public class UserService {
         return true;
     }
 
-    public Optional<User> getUserByPrincipal(Principal principal) {
-        return userRepository.findByEmail(principal.getName());
-    }
-
     public void updateUser(Long id, User user) {
-        User updateUser = userRepository.findById(id).get();
+        User updateUser = userRepository.findById(id).orElseThrow(()->new NoSuchElementException("User not found"));
         updateUser.setName(user.getName());
         updateUser.setLastname(user.getLastname());
         updateUser.setEmail(user.getEmail());
@@ -87,36 +55,29 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        orderService.deleteAllOrdersForUser(userRepository.findById(id).get());
+        orderService.deleteAllOrdersForUser(userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found")));
         userRepository.deleteById(id);
     }
 
     public User userForId(Long id) {
-        User user = userRepository.findById(id).get();
-        return user;
+        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
     }
-    public void authenticateUserAndSetSession(String email,String password, HttpServletRequest request) {
-        System.out.println("Email: " + email);
-        System.out.println("Password: " + password);
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email,password);
-        request.getSession(true);
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+    public void authenticateUserAndSetSession(String email, String password, HttpServletRequest request) {
+        try {
+            request.login(email, password);
+        }catch (ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void banUser(Long id) {
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(()->new NoSuchElementException("User not found"));
         if (user != null) {
-            System.out.println();
-            System.out.println();
-            System.out.println();
             if (user.getStatus().equals(Status.ACTIVE)) {
                 user.setStatus(Status.BANNED);
             } else {
                 user.setStatus(Status.ACTIVE);
             }
+            userRepository.save(user);
         }
-        userRepository.save(user);
     }
-
 }

@@ -3,15 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff; /* Измените на желаемый цвет */
+            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }.href {
+            
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 20px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 10px;
+            transition: background-color 0.3s;
+        }.hrefs{
+            display: flex;
+            justify-content: center;    
+        }
+        .admin-menu {
+            display: flex;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 50px;
+            
+        }
+        .admin-menu a {
+
+            display: inline-block;
+            margin: 0 10px;
+            color: #5cabff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-<a th:href="@{/admin/products}"
-   th:text=Products></a>
-<a th:href="@{/admin/categories}"
-   th:text=Categories></a>
-<a th:href="@{/admin/users}"
-   th:text=Users></a>
-<a th:href="@{/admin/orders}"
-   th:text=Orders></a>
+<div class="header-bar">
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
+    </div>
+    <div class="auth-links">
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="admin-menu">Меню администратора</div>
+<div class="hrefs">
+    <a class="href" th:href="@{/admin/products}">Продукты</a>
+    <a class="href" th:href="@{/admin/categories}">Категории</a>
+    <a class="href" th:href="@{/admin/users}">Пользователи</a>
+    <a class="href" th:href="@{/admin/orders}">Заказы</a>
+</div>
+
 </body>
 </html>

@@ -14,13 +14,6 @@
         #category-select {
             margin: 20px;
         }
-        .products-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin: 0 auto;
-            max-width: 1200px;
-        }
         body {
             margin: 0;
             padding: 0;
@@ -59,7 +52,6 @@
         color: white;
         cursor: pointer;
         }
-
         .header-bar {
             display: flex;
             justify-content: space-between;
@@ -68,11 +60,112 @@
             color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
             padding: 10px 20px;
         }.logout-form {
-            display: inline-flex; /* Или просто 'flex' */
-            align-items: center; /* Центрируем элементы по вертикали */
+            display: inline-flex;
+            align-items: center;
             margin-left: auto;
+        }.products-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 0 auto;
+            max-width: 1200px;
+        }.product-card {
+            flex: 0 0 33.33%;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            padding: 10px;
+            transition: box-shadow 0.3s;
+        }.search-form {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 5px;
+            border-radius: 5px;
+        }.search-form input[type="text"] {
+            padding: 10px;
+            font-size: 17px;
+            border: none;
+            float: left;
+            width: 60%;
+            background: #fff;
+            border-radius: 5px 0 0 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }.search-form input[type="text"]:focus {
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }.search-form button {
+            float: left;
+            width: 25%;
+            padding: 10px;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+            background: #0b7dda;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            transition: background 0.3s;
+        }.search-form button:hover {
+            background: #0a6cad;      
+        }#category-select {
+            display: flex;
+            justify-content: right;
+            margin: 20px;
         }
-        
+
+        #category-select select {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background: #fff;
+            border-radius: 5px 0 0 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+            width: 65%;
+        }
+
+        #category-select select:focus {
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        #category-select button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            background: #0b7dda;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            transition: background 0.3s;
+            width: 33%;
+        }
+
+        #category-select button:hover {
+            background: #0a6cad;
+        }#category-and-search {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            align-items: center;
+            gap: 20px;
+        }.product-card img {
+            max-width: 100%;
+            max-height: 150px;
+        }.product-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }.product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #5cabff;
+        }.product-availability {
+            font-size: 14px;
+            color: #999;
+            }
     </style>
 </head>
 <body>
@@ -82,6 +175,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !isAdmin}" th:href="@{/order/myOrders}" th:text="'Мои заказы'">Мои заказы</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !isAdmin}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
@@ -93,39 +187,39 @@
         </div>
     </div>
 </div>
-<hr>
-<a th:if="${isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-<hr>
-<div id="category-select">
-    <form th:action="@{/home}" method="get">
-        <select name="category">
-            <option value="">All Categories</option>
-            <option th:each="category : ${categories}"
-                    th:value="${category.id}"
-                    th:text="${category.name}">
-            </option>
-        </select>
-        <button type="submit">Filter</button>
-    </form>
-</div>
-<div>
-    <form th:action="@{/home/name}" method="get">
-        <input type="text" name="name" placeholder="Enter product name">
-        <button type="submit">Search</button>
-    </form>
+<div id="category-and-search">
+    <div class="search-form">
+        <form th:action="@{/home/name}" method="get">
+            <input type="text" name="name" placeholder="Enter product name">
+            <button type="submit">Поиск</button>
+        </form>
+    </div>
+    <div id="category-select">
+        <form th:action="@{/home}" method="get">
+            <select name="category">
+                <option value="">Все категории</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+            <button type="submit">Фильтр</button>
+        </form>
+    </div>
+    
 </div>
 <hr>
 <div class="products-container">
-    <div th:each="product : ${products}" class="product-card">
-        <!-- Thumbnail Image -->
-        <a th:href="@{/home/{id}(id=${product.id})}">
-            <img th:if="${product.previewImageUrl}" th:src="${product.previewImageUrl}" alt="Product Image" style="max-width:150px; width: auto; height: auto;"/>
-            <p th:text="${product.name}">Product Info</p>
-            <p th:text="${' Price: ' + product.price}">Product Info</p>
-        </a>
-    </div>
+    <a th:each="product : ${products}" th:href="@{/home/{id}(id=${product.id})}" class="product-card">
+        <div>
+            <img th:if="${product.previewImageUrl}" th:src="${product.previewImageUrl}" alt="Product Image"/>
+            <p class="product-name" th:text="${product.name}">Product Info</p>
+            <p class="product-price" th:text="${'Цена: ' + product.price + ' руб.'}">Product Info</p>
+            <p class="product-availability" th:text="${product.quantity <= 0 ? 'Нет в наличии' : 'В наличии: ' + product.quantity}">Product Info</p>
+        </div>
+    </a>
+
 </div>
 <br/>
-
 </body>
 </html>

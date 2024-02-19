@@ -4,7 +4,6 @@ import onlineshop.shop.model.Product;
 import onlineshop.shop.model.ProductImage;
 import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductRepository;
-import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -13,20 +12,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/home")
 public class HomeController {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public HomeController(ProductRepository productRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public HomeController(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -37,8 +34,6 @@ public class HomeController {
         if(authentication != null){
             isAdmin =  authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("developers:admin"));
-            System.out.println(isAdmin);
-            System.out.println(authentication.getAuthorities().toString());
         }
         if (id == null) {
             list = productRepository.findAll();
@@ -47,14 +42,13 @@ public class HomeController {
         }
         for (Product product : list) {
             if (product.getImages() != null && !product.getImages().isEmpty()) {
-                ProductImage image = product.getImages().get(0);
+                ProductImage image = product.getImages().getFirst();
                 if(image.isPreviewImage()){
                     previewImageUrl = "/images/" + image.getId();
                 }
             }
             product.setPreviewImageUrl(previewImageUrl);
         }
-
         model.addAttribute("products", list);
         model.addAttribute("categories",categoryRepository.findAll());
         model.addAttribute("isAdmin", isAdmin);
@@ -63,9 +57,8 @@ public class HomeController {
 
     @GetMapping("/{id}")
     public String getForId(@PathVariable Long id,Model model){
-        Optional<Product> productPersonal = productRepository.findById(id);
-        if(productPersonal.isPresent()){
-            Product product = productPersonal.get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Product not found"));
+        if(product != null){
             model.addAttribute("product",product);
             model.addAttribute("images", product.getImages());
             return "productForID";
@@ -75,13 +68,11 @@ public class HomeController {
     }
     @GetMapping("/name")
     public String getForName(@RequestParam String name,Model model){
-        System.out.println(name);
-        Optional<Product> productPersonal = productRepository.findByName(name);
-        System.out.println(productPersonal.get().getName());
+        Product product = productRepository.findByName(name).orElseThrow(() -> new NoSuchElementException("Product not found"));
         model.addAttribute("products", productRepository.findAll());
-        if(productPersonal.isPresent()){
-            Product product = productPersonal.get();
+        if(product != null){
             model.addAttribute("product",product);
+            model.addAttribute("images", product.getImages());
             return "productForID";
         }else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");

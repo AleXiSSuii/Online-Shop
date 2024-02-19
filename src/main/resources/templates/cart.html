@@ -21,8 +21,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #1E90FF; /* Измените на желаемый цвет */
-            color: white; /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #1E90FF;
+            color: white;
             padding: 10px 20px;
         }
         .header-title {
@@ -39,30 +39,161 @@
             transition: background-color 0.3s;
         }.auth-links {
             display: flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
         }
         .header-title {
             font-size: 24px;
             font-weight: bold;
         }
         .header-title a {
-        text-decoration: none;
-        color: white;
-        cursor: pointer;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
         }
         .header-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #5cabff; /* Измените на желаемый цвет */
-            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #5cabff;
+            color: rgb(255, 255, 255);
             padding: 10px 20px;
         }.logout-form {
             display: inline-flex;
             align-items: center;
             margin-left: auto;
+        }.product-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
         }
-        
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .product-info span {
+            margin-bottom: 5px;
+        }
+        .product-actions {
+            display: flex;
+            align-items: center;
+        }
+        .product-actions input[type="number"] {
+            width: 50px;
+            margin-right: 5px;
+        }
+        .product-actions form {
+            margin-left: 10px;
+        }
+        .clear-form input[type="submit"] {
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .order-form input[type="submit"] {
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }.quantity-input::-webkit-inner-spin-button,
+        .quantity-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .quantity-input {
+            -moz-appearance: textfield;
+        }.quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-control-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #f0f0f0;
+            border: none;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .quantity-input {
+            width: 50px;
+            height: 30px;
+            margin: 0 10px;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .product-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .product-actions input[type="submit"] {
+            background-color: #5cabff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }.update-quantity{
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }.empty-cart{
+            color: #5c5555a2;
+            font-size: 20px;
+            text-align:center;
+            padding-top: 200px;
+        }.href {
+            background-color: #5cabff;
+            color: #fff;
+            font-size: 16px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 10px;
+            transition: background-color 0.3s;
+        }.product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #5cabff;
+            margin-bottom: 10px;
+        }.availability{
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }.product-description {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -72,7 +203,10 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and isAdmin == null}" th:href="@{/order/myOrders}"
+           th:text="'Мои заказы'">Мои заказы</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
+           th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
         <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
@@ -84,34 +218,91 @@
     </div>
 </div>
 <br/>
-<div th:each="cartItem : ${cart}">
-    <div class="product-container">
-        <div class="product-info">
-            <span th:text="${cartItem.product.name}"></span>
-            <span>Price:</span>
-            <span th:text="${cartItem.price}"></span>
-            <span>Quantity:</span>
-            <span th:text="${cartItem.quantity}"></span>
+<div th:if="${cart.isEmpty()}" class="empty-cart">
+    <p>В вашей корзине пока нет товаров</p>
+    <div>
+        <a class="href" th:href="@{/home}">Главная</a>
+    </div>
+</div>
+
+<div th:if="${not cart.isEmpty()}">
+    <div th:each="cartItem : ${cart}">
+        <div class="product-container">
+            <div>
+                <a th:href="@{'/home/' + ${cartItem.product.id}}">
+                    <img th:if="${cartItem.product.previewImageUrl}" th:src="${cartItem.product.previewImageUrl}"
+                         alt="Product Image"
+                         style="width: 130px; height: 130px; margin-bottom: 10px;"/>
+                </a>
+            </div>
+            <div class="product-info">
+                <span class="product-info" th:text="${cartItem.product.name}"></span>
+                <span class="product-price"><span th:text="${cartItem.price + ' руб'}"></span></span>
+                <span class="availability"><span th:text="${cartItem.quantity + ' шт'}"></span></span>
+            </div>
+            <div class="product-actions">
+                <form th:action="@{/cart/edit}" method="Post" id="updateForm">
+                    <input type="hidden" name="_method" value="patch"/>
+                    <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}"/>
+                    <div class="quantity-controls" data-max-quantity="${cartItem.product.quantity}">
+                        <button type="button" onclick="decreaseQuantity(event)" class="quantity-control-btn">-</button>
+                        <input type="number" name="quantity" th:value="${cartItem.quantity}" min="1"
+                               th:max="${T(java.lang.Integer).parseInt(cartItem.product.quantity)}"
+                               onchange="updateMaxQuantity(this)" class="quantity-input" readonly/>
+                        <button type="button" onclick="increaseQuantity(event)" class="quantity-control-btn">+</button>
+                    </div>
+                </form>
+                <form th:action="@{/cart/deleteItem}" th:method="DELETE">
+                    <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}"/>
+                    <input type="submit" value="Удалить"/>
+                </form>
+            </div>
+            <script>
+                let timeout = null;
+                function decreaseQuantity(event) {
+                    const quantityInput = event.target.closest('.product-container').querySelector('input[name="quantity"]');
+                    let quantity = parseInt(quantityInput.value);
+                    if (quantity > 1) {
+                        quantity--;
+                        quantityInput.value = quantity;
+                        updateForm(event);
+                    }
+                }
+
+                function updateMaxQuantity(input) {
+                    const quantityControls = input.closest('.quantity-controls');
+                    const maxQuantity = quantityControls.getAttribute('data-max-quantity');
+                    input.setAttribute('max', maxQuantity);
+                }
+
+                function increaseQuantity(event) {
+                    const quantityInput = event.target.closest('.product-container').querySelector('input[name="quantity"]');
+                    let quantity = parseInt(quantityInput.value);
+                    const maxQuantity = parseInt(quantityInput.getAttribute('max'));
+                    if (quantity < maxQuantity) {
+                        quantity++;
+                        quantityInput.value = quantity;
+                        updateForm(event);
+                    }
+                }
+
+                function updateForm(event) {
+                    const form = event.target.closest('form');
+                    form.submit();
+                }
+            </script>
         </div>
-        <form th:action="@{/cart/edit}" method="Post">
-            <input type="hidden" name="_method" value="patch"/>
-            <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}" />
-            <input type="number" name="quantity" min="0" th:value="${cartItem.quantity}"/>
-            <input type="submit" value="Update quantity"/>
+    </div>
+    <div style="display: flex; margin-left: 10px;">
+        <form class="order-form" th:action="@{/order}" method="get">
+            <input type="submit" value="Заказать"/>
         </form>
-        <form th:action="@{/cart/delete}" th:method="DELETE">
-            <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}" />
-            <input type="submit" value="Delete"/>
+        <form class="clear-form" th:action="@{/cart/clear}" method="post" style="margin-left: 5px;">
+            <input type="hidden" name="_method" value="DELETE"/>
+            <input type="submit" value="Очистить коризину"/>
         </form>
     </div>
 </div>
-<form th:action="@{/cart/clear}" method="post">
-    <input type="hidden" name="_method" value="DELETE"/>
-    <input type="submit" value="Clear"/>
-</form>
-<form th:action="@{/order}" method="get">
-    <input type="submit" value="Place an order"/>
-</form>
 <br/>
 </body>
 </html>
