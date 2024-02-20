@@ -29,4 +29,12 @@ public class EmailService {
         message.setText("Добро пожаловать, " + user.getName());
         javaMailSender.send(message);
     }
+    public void send(String recipientEmail,String subject,String message) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(recipientEmail);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+        javaMailSender.send(mailMessage);
+    }
+
 }

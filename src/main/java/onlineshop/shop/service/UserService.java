@@ -14,8 +14,10 @@ import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -26,21 +28,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private EmailService emailService;
 
     public List<User> allUsers() {
         return userRepository.findAll();
-    }
-
-    public boolean createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
-        user.setStatus(Status.ACTIVE);
-        Cart cart = new Cart();
-        user.setCart(cart);
-        cartRepository.save(cart);
-        userRepository.save(user);
-        log.info("Готово к отправлению: {}", user.getEmail());
-        return true;
     }
 
     public void updateUser(Long id, User user) {
@@ -59,16 +51,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User userForId(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
-    }
-    public void authenticateUserAndSetSession(String email, String password, HttpServletRequest request) {
-        try {
-            request.login(email, password);
-        }catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public void banUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(()->new NoSuchElementException("User not found"));
         if (user != null) {
@@ -80,4 +62,11 @@ public class UserService {
             userRepository.save(user);
         }
     }
+    public User userForId(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
+    }
+    public User userForActivationCode(String activationCode){
+        return userRepository.findByActivationCode(activationCode);
+    }
+
 }

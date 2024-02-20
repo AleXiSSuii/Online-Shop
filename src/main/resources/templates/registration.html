@@ -92,6 +92,7 @@
         <a href="/login">Вход в систему</a>
     </div>
     <p th:if="${param.error}" class="error-msg">Ошибка при регистрации</p>
+    <p th:if="${error}" class="error-msg"><span th:text="${error}"></span></p>
 </div>
 </body>
 </html>

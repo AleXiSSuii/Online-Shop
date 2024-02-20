@@ -11,7 +11,6 @@ import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.OrderRepository;
 import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
@@ -48,8 +47,7 @@ public class OrderService {
     }
 
     public User getUserOfPrincipal(Principal principal){
-        return userRepository.findByEmail(principal.getName()).
-                orElseThrow(() -> new UsernameNotFoundException("User with email " + principal.getName() + " not found."));
+        return userRepository.findByEmail(principal.getName());
     }
 
     public Order confirmOrder(Principal principal){
@@ -89,8 +87,8 @@ public class OrderService {
     }
     public void deleteAllOrdersForUser(User user){
         List<Order> ordersList = user.getOrders();
-        for(int i = 0; i < ordersList.size(); i++){
-            orderRepository.deleteById(ordersList.get(i).getId());
+        for (Order order : ordersList) {
+            orderRepository.deleteById(order.getId());
         }
         user.getOrders().clear();
     }
@@ -116,9 +114,6 @@ public class OrderService {
         return true;
     }
     public boolean checkedEmptyOrder(List<CartItem> cart){
-        if(cart.size()==0){
-            return true;
-        }
-        return false;
+        return cart.isEmpty();
     }
 }

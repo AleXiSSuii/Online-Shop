@@ -6,7 +6,6 @@ import onlineshop.shop.model.Product;
 import onlineshop.shop.model.User;
 import onlineshop.shop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
@@ -30,8 +29,7 @@ public class CartService {
     }
 
     public User getUserOfPrincipal(Principal principal){
-        return userRepository.findByEmail(principal.getName()).
-                orElseThrow(() -> new UsernameNotFoundException("User with email " + principal.getName() + " not found."));
+        return userRepository.findByEmail(principal.getName());
     }
     public Cart getCart(User user){
         return cartRepository.findById(user.getCart().getId()).orElseThrow(() -> new NoSuchElementException("Cart not found"));

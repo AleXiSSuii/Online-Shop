@@ -54,4 +54,6 @@ public class User{
     private Address address;
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+    @Column(name = "activation_code")
+    private String activationCode;
 }
