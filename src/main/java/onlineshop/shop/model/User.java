@@ -36,7 +36,7 @@ public class User{
     private String name;
     @Column(name = "lastname")
     @NotEmpty(message = "LastName should not be empty")
-    @Size(min = 1, max = 30, message = "Name should be between 1-30 characters")
+    @Size(min = 1, max = 30, message = "LastName should be between 1-30 characters")
     private String lastname;
     @Column(name = "password")
     private String password;

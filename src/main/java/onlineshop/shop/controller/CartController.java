@@ -5,12 +5,12 @@ import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.ProductImage;
 import onlineshop.shop.model.User;
 import onlineshop.shop.service.CartService;
-import onlineshop.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,6 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public String getCart(Model model,Principal principal) {

@@ -12,8 +12,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #1E90FF; /* Измените на желаемый цвет */
-            color: white; /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #1E90FF;
+            color: white;
             padding: 10px 20px;
         }
         .header-title {
@@ -45,25 +45,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #5cabff; /* Измените на желаемый цвет */
-            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #5cabff;
+            color: rgb(255, 255, 255);
             padding: 10px 20px;
         }.logout-form {
-            display: inline-flex; /* Или просто 'flex' */
-            align-items: center; /* Центрируем элементы по вертикали */
+            display: inline-flex;
+            align-items: center;
             margin-left: auto;
         }.carousel-slide {
-            width: 100%; /* Занимает всю ширину окна */
-            height: auto; /* Автоматическая высота */
-            display: flex; /* Используем flexbox для выравнивания содержимого */
-            justify-content: center; /* Центрирование содержимого по горизонтали */
-            align-items: center; /* Центрирование содержимого по вертикали */
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }.slick-carousel {
-            width: 30%; /* Увеличение ширины окна */
+            width: 30%;
             margin-top: 20px;
             margin-right: auto;
             margin-left: auto;
-            border: 1px solid #ccc; /* Граница окна */
+            border: 1px solid #ccc;
         }.carousel-image {
             width: 100%;
             height: 100%;
@@ -108,10 +108,10 @@
             margin-right: 100px ;
         }.product-info{
             text-align: justify;
-            background-color: #ffffff; /* Цвет фона */
-            padding: 20px; /* Внутренний отступ */
-            border-radius: 5px; /* Закругление углов */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень блока */
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             margin-right: 200px;
             margin-left: 200px;
@@ -129,6 +129,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
@@ -161,8 +162,8 @@
 <script>
     $(document).ready(function() {
         $('.slick-carousel').slick({
-            dots: false, // Отключение индикаторов слайдов
-            arrows: true, // Включение кнопок переключения
+            dots: false,
+            arrows: true,
             prevArrow: '<button type="button" class="slick-prev"><</button>',
             nextArrow: '<button type="button" class="slick-next">></button>'
         });
@@ -170,10 +171,10 @@
 </script>
 <div class="product-container">
     <p class="product-description" th:text="${product.getName}">VALUE</p>
-    <p class="product-price" th:text="${'Price: ' + product.getPrice}">VALUE</p>
+    <p class="product-price" th:text="${'Цена ' + product.getPrice + ' руб'}">VALUE</p>
     <form th:action="@{/cart/add}" th:method="post">
         <input type="hidden" th:name="product_id" th:value="${product.id}"/>
-        <input type="submit" class="add-to-cart-btn" value="Add to Cart" th:disabled="${product.getQuantity() == 0}"/>
+        <input type="submit" class="add-to-cart-btn" value="В корзину" th:disabled="${product.getQuantity() == 0}"/>
     </form>
     <p class="availability-info" th:if="${product.getQuantity() <= 0}">Нет в наличии</p>
     <p class="availability-info" th:if="${product.getQuantity() > 0}" th:text="'В наличии: ' + ${product.getQuantity()}">VALUE</p>

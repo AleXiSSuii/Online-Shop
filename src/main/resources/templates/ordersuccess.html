@@ -33,12 +33,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #5cabff; /* Измените на желаемый цвет */
-            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
-            padding: 10px 20px;
+            background-color: #5cabff;
+            color: rgb(255, 255, 255);
         }.logout-form {
-            display: inline-flex; /* Или просто 'flex' */
-            align-items: center; /* Центрируем элементы по вертикали */
+            display: inline-flex;
+            align-items: center;
             margin-left: auto;
         } body {
             font-family: Arial, sans-serif;
@@ -103,7 +102,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
         <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">

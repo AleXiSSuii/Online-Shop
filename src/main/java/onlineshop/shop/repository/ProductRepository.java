@@ -1,6 +1,5 @@
 package onlineshop.shop.repository;
 
-import onlineshop.shop.model.Category;
 import onlineshop.shop.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

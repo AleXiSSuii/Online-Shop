@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New address</title>
+    <title>Title</title>
     <style>
-       body {
+        body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
@@ -97,23 +97,6 @@
 
         .registration-form input[type="submit"]:hover {
             background-color: #4a95e4;
-        }.menu {
-            display: flex;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 50px;
-            margin-bottom: 20px;
-            
-        }
-        .menu a {
-
-            display: inline-block;
-            margin: 0 10px;
-            color: #5cabff;
-            text-decoration: none;
-            font-size: 20px;
-        
         }
     </style>
 </head>
@@ -124,7 +107,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}"th:text="'Личный кабинет'">Личный кабинет</a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/user/getAccount}"th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
            th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
@@ -137,38 +120,30 @@
         </div>
     </div>
 </div>
-<div class="menu">Добавьте адресные данные</div>
 <div class="form-container">
-    <form th:action="@{/address/addAddress}" method="post" class="registration-form" th:object="${address}">
+    <form th:method="PATCH" th:action="@{/user/changingUserData}" class="registration-form" th:object="${user}">
         <div class="input-row">
             <div>
-                <input type="text" th:field="*{state}" placeholder="Область" id="state"/>
-                <div style="color:red" th:if="${#fields.hasErrors('state')}" th:errors="*{state}">State error</div>
+                <input type="email" th:field="*{email}" placeholder="E-mail" id="email"/>
+                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
             </div>
             <div>
-                <input type="text" th:field="*{city}" placeholder="Город" id="city"/>
-                <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City error</div>
+                <input type="tel" th:field="*{number}" placeholder="Телефон" id="number"/>
+                <div style="color:red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number error</div>
             </div>
         </div>
         <div class="input-row">
             <div>
-                <input type="text" th:field="*{street}" placeholder="Улица" id="street"/>
-                <div style="color:red" th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Street error</div>
+                <input type="text" th:field="*{lastname}" placeholder="Фамилия" id="lastname"/>
+                <div style="color:red" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Surname error</div>
             </div>
             <div>
-                <input type="text" th:field="*{building}" placeholder="Номер дома" id="building"/>
-                <div style="color:red" th:if="${#fields.hasErrors('building')}" th:errors="*{building}">Building error</div>
+                <input type="text" th:field="*{name}" placeholder="Имя" id="name"/>
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
             </div>
         </div>
-        <div class="input-row">
-            <div>
-                <input type="text" th:field="*{apartment}" placeholder="Квартира" id="apartment"/>
-                <div style="color:red" th:if="${#fields.hasErrors('apartment')}" th:errors="*{apartment}">Apartment error</div>
-            </div>
-            <div>
-                <input type="text" th:field="*{postalCode}" placeholder="Индекс" id="postalCode"/>
-                <div style="color:red" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">postalCode error</div>
-            </div>
+        <div>
+            <input type="password" th:field="*{password}" placeholder="Пароль" id="password"/>
         </div>
         <div class="button-row">
             <input type="submit" value="Изменить данные" />

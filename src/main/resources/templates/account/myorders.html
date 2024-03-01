@@ -21,8 +21,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #1E90FF; /* Измените на желаемый цвет */
-            color: white; /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #1E90FF;
+            color: white;
             padding: 10px 20px;
         }
         .header-title {
@@ -54,8 +54,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #5cabff; /* Измените на желаемый цвет */
-            color: rgb(255, 255, 255); /* Цвет текста, который будет хорошо виден на фоне выбранного цвета плашки */
+            background-color: #5cabff;
+            color: rgb(255, 255, 255);
             padding: 10px 20px;
         }.logout-form {
             display: inline-flex;
@@ -149,8 +149,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/order/myOrders}"
-           th:text="'Мои заказы'">Мои заказы</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
            th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>

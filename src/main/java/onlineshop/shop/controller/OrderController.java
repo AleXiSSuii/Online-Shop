@@ -1,15 +1,10 @@
 package onlineshop.shop.controller;
 
-import onlineshop.shop.model.Address;
 import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Order;
 import onlineshop.shop.model.User;
-import onlineshop.shop.service.CartService;
-import onlineshop.shop.service.EmailService;
-import onlineshop.shop.service.OrderService;
-import onlineshop.shop.service.ProductService;
+import onlineshop.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -33,42 +28,32 @@ public class OrderController {
     private CartService cartService;
     @Autowired
     private ProductService productService;
-
-
-    @GetMapping("/addAddress")
-    public String orderAddAddress(Model model, Address address){
-
-        model.addAttribute("address",address);
-        return "addAddress";
-    }
-
-    @PostMapping("/addAddress")
-    public String orderAddAddress(Address address,Principal principal){
-        orderService.addAddressToUser(address,principal);
-        return "redirect:/home";
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping
-    public String order(Model model,Principal principal){
-        User user = orderService.getUserOfPrincipal(principal);
-        if(user.getAddress()!=null){
+    public String order(Model model, Principal principal) {
+        User user = userService.getUserOfPrincipal(principal);
+        if (user.getAddress() != null) {
             model.addAttribute("order", orderService.confirmOrder(principal));
             model.addAttribute("cart", cartService.getCart(user));
             return "order";
-        }else{
+        } else {
             return "redirect:/order/addAddress";
         }
     }
+
     @PostMapping
-    public String order(Principal principal,Model model){
-        if(principal != null){
-            User user = orderService.getUserOfPrincipal(principal);
+    public String order(Principal principal, Model model) {
+        if (principal != null) {
+            User user = userService.getUserOfPrincipal(principal);
             List<CartItem> cartItems = user.getCart().getCartList();
-            if(orderService.checkedEmptyOrder(cartItems)){
+            if (orderService.checkedEmptyOrder(cartItems)) {
                 model.addAttribute("error", "Ваш заказ пустой");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
-            }if(!productService.changeQuantity(cartItems)){
+            }
+            if (!productService.changeQuantity(cartItems)) {
                 model.addAttribute("error", "Такого количество продуктов на данный момент нет на складе");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
@@ -76,32 +61,34 @@ public class OrderController {
             if (orderService.checkedQuantity(cartItems)) {
                 Order order = orderService.saveOrder(principal);
                 return "redirect:/order/orderSuccess/" + order.getId();
-            }else {
+            } else {
                 model.addAttribute("error", "На складе нет такого количества товара.");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
             }
 
-        }else {
+        } else {
             throw new UsernameNotFoundException("User is not authorize");
         }
     }
+
     @GetMapping("/orderSuccess/{id}")
-    public String orderSuccess(@PathVariable Long id,Model model, Principal principal){
-        User user = orderService.getUserOfPrincipal(principal);
-        if(user.getAddress()!=null){
+    public String orderSuccess(@PathVariable Long id, Model model, Principal principal) {
+        User user = userService.getUserOfPrincipal(principal);
+        if (user.getAddress() != null) {
             model.addAttribute("order", orderService.orderGetForId(id));
             return "orderSuccess";
-        }else{
+        } else {
             return "redirect:/order/addAddress";
         }
     }
+
     @GetMapping("/myOrders")
-    public String myOrders(Model model,Principal principal){
-        User user = orderService.getUserOfPrincipal(principal);
+    public String myOrders(Model model, Principal principal) {
+        User user = userService.getUserOfPrincipal(principal);
         model.addAttribute("user", user);
-        model.addAttribute("orders",user.getOrders());
-        return "myorders";
+        model.addAttribute("orders", user.getOrders());
+        return "/account/myOrders";
     }
 
 }

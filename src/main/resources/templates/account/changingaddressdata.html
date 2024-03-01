@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New address</title>
+    <title>Title</title>
     <style>
-       body {
+        body {
             margin: 0;
             font-family: Arial, sans-serif;
         }
@@ -124,7 +124,7 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}"th:text="'Личный кабинет'">Личный кабинет</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
            th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
@@ -137,9 +137,9 @@
         </div>
     </div>
 </div>
-<div class="menu">Добавьте адресные данные</div>
+<div class="menu">Измените адресные данные</div>
 <div class="form-container">
-    <form th:action="@{/address/addAddress}" method="post" class="registration-form" th:object="${address}">
+    <form th:method="PATCH" th:action="@{/address/changingAddressData}" class="registration-form" th:object="${address}">
         <div class="input-row">
             <div>
                 <input type="text" th:field="*{state}" placeholder="Область" id="state"/>

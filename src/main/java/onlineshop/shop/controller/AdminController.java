@@ -2,18 +2,17 @@ package onlineshop.shop.controller;
 
 import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.Category;
-import onlineshop.shop.model.Order;
 import onlineshop.shop.model.Product;
-import onlineshop.shop.model.User;
 import onlineshop.shop.service.OrderService;
 import onlineshop.shop.service.ProductService;
 import onlineshop.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 
 @Controller
@@ -109,21 +108,9 @@ public class AdminController {
 
     }
 
-    @PatchMapping("/users/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        userService.updateUser(id, user);
-        return "redirect:/admin/users";
-
-    }
     @PostMapping("users/ban/{id}")
     public String userBan(@PathVariable("id") Long id) {
         userService.banUser(id);
-        return "redirect:/admin/users";
-    }
-
-    @DeleteMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
         return "redirect:/admin/users";
     }
 
@@ -171,7 +158,6 @@ public class AdminController {
     @GetMapping("/orders/{id}")
     public String orderForUser(@PathVariable("id") Long id ,Model model){
         model.addAttribute("order", orderService.orderGetForId(id));
-        Order order = orderService.orderGetForId(id);
         return "/admin/order/orderForUser";
     }
     @PostMapping("/orders/status/{id}")

@@ -1,18 +1,17 @@
 package onlineshop.shop.service;
 
 
-import onlineshop.shop.model.Address;
 import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Order;
 import onlineshop.shop.model.User;
 import onlineshop.shop.model.enums.StatusOrder;
-import onlineshop.shop.repository.AddressRepository;
 import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.OrderRepository;
 import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,13 +21,11 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final AddressRepository addressRepository;
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
     @Autowired
-    public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, UserRepository userRepository, CartItemRepository cartItemRepository) {
+    public OrderService(OrderRepository orderRepository, UserRepository userRepository, CartItemRepository cartItemRepository) {
         this.orderRepository = orderRepository;
-        this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.cartItemRepository = cartItemRepository;
     }
@@ -38,20 +35,11 @@ public class OrderService {
     private ProductService productService;
     @Autowired
     private EmailService emailService;
-
-    public void addAddressToUser(Address address, Principal principal){
-        User user = getUserOfPrincipal(principal);
-        user.setAddress(address);
-        addressRepository.save(address);
-        userRepository.save(user);
-    }
-
-    public User getUserOfPrincipal(Principal principal){
-        return userRepository.findByEmail(principal.getName());
-    }
+    @Autowired
+    private UserService userService;
 
     public Order confirmOrder(Principal principal){
-        User user = getUserOfPrincipal(principal);
+        User user = userService.getUserOfPrincipal(principal);
         return createOrderForUser(user);
     }
 
@@ -66,7 +54,7 @@ public class OrderService {
 
     @Transactional
     public Order saveOrder(Principal principal){
-        User user = getUserOfPrincipal(principal);
+        User user = userService.getUserOfPrincipal(principal);
         Order order = createOrderForUser(user);
         order.setDate(LocalDateTime.now());
         List<CartItem> cartList = new ArrayList<>(user.getCart().getCartList());
@@ -85,13 +73,7 @@ public class OrderService {
         productService.changeQuantity(cartList);
         return order;
     }
-    public void deleteAllOrdersForUser(User user){
-        List<Order> ordersList = user.getOrders();
-        for (Order order : ordersList) {
-            orderRepository.deleteById(order.getId());
-        }
-        user.getOrders().clear();
-    }
+
     public List<Order> orderList(){
         return orderRepository.findAll();
     }
@@ -116,4 +98,5 @@ public class OrderService {
     public boolean checkedEmptyOrder(List<CartItem> cart){
         return cart.isEmpty();
     }
+
 }

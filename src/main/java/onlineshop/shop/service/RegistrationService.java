@@ -11,7 +11,6 @@ import onlineshop.shop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 @Service
@@ -58,6 +57,7 @@ public class RegistrationService {
         user.setCart(cart);
         cartRepository.save(cart);
         userRepository.save(user);
+        emailService.sendSuccessRegistration(user);
         return true;
     }
 }
