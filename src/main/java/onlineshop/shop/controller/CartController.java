@@ -5,6 +5,7 @@ import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.ProductImage;
 import onlineshop.shop.model.User;
 import onlineshop.shop.service.CartService;
+import onlineshop.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,12 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public String getCart(Model model,Principal principal) {
-        User user = cartService.getUserOfPrincipal(principal);
+        User user =  userService.userForPrincipal(principal);
         String previewImageUrl = "";
         Cart cart = user.getCart();
         if (cart != null) {
@@ -58,8 +61,8 @@ public class CartController {
     }
 
     @DeleteMapping("/deleteItem")
-    public String deleteCartItem(@RequestParam("cartItem_Id") Long cartItemId,Principal principal) {
-        cartService.deleteCartItem(cartItemId,principal);
+    public String deleteCartItem(@RequestParam("cartItem_Id") Long cartItemId) {
+        cartService.deleteCartItem(cartItemId);
         return "redirect:/cart";
     }
     @PatchMapping("/edit")

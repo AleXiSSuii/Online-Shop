@@ -1,5 +1,6 @@
 package onlineshop.shop.service;
 
+import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Category;
 import onlineshop.shop.model.Product;
@@ -7,7 +8,6 @@ import onlineshop.shop.model.ProductImage;
 import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductImageRepository;
 import onlineshop.shop.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,19 +17,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
-
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductImageRepository imageRepository;
-
-
-    @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductImageRepository productImageRepository) {
-        this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.imageRepository = productImageRepository;
-    }
 
     public void createProduct(Product product,
                               MultipartFile file1,
@@ -132,7 +124,7 @@ public class ProductService {
         categoryRepository.save(updateCategory);
     }
 
-    public boolean changeQuantity(List<CartItem> cartList) {
+    public boolean checkForChangeQuantity(List<CartItem> cartList) {
         for (CartItem cartItem : cartList) {
             Product product = cartItem.getProduct();
             if (product.getQuantity() - cartItem.getQuantity() >= 0) {

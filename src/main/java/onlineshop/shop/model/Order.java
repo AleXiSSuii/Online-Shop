@@ -33,6 +33,6 @@ public class Order {
 
     public String getFormattedDate(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return getDate().format(formatter);
+        return formatter.format(getDate());
     }
 }

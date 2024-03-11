@@ -1,45 +1,36 @@
 package onlineshop.shop.service;
 
+import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.Cart;
 import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Product;
 import onlineshop.shop.model.User;
-import onlineshop.shop.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import onlineshop.shop.repository.CartItemRepository;
+import onlineshop.shop.repository.CartRepository;
+import onlineshop.shop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
-    @Autowired
-    public CartService(CartItemRepository cartItemRepository,
-                       UserRepository userRepository,
-                       CartRepository cartRepository,
-                       ProductRepository productRepository) {
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.userRepository = userRepository;
-    }
+    private final UserService userService;
 
-    public User getUserOfPrincipal(Principal principal){
-        return userRepository.findByEmail(principal.getName());
-    }
-    public Cart getCart(User user){
+    public Cart getCart(User user) {
         return cartRepository.findById(user.getCart().getId()).orElseThrow(() -> new NoSuchElementException("Cart not found"));
     }
-    public void addProductToCart(Long productId,Principal principal) {
-        User user = getUserOfPrincipal(principal);
+
+    public void addProductToCart(Long productId, Principal principal) {
+        User user = userService.userForPrincipal(principal);
         Product product = productRepository.findById(productId).
-                orElseThrow(()-> new NoSuchElementException("Product not found"));
+                orElseThrow(() -> new NoSuchElementException("Product not found"));
         Cart cart = cartRepository.findById(user.getCart().getId()).
-                orElseThrow(()-> new NoSuchElementException("Cart not found"));
+                orElseThrow(() -> new NoSuchElementException("Cart not found"));
         if (!cart.getCartList().isEmpty()) {
             for (int i = 0; i < cart.getCartList().size(); i++) {
                 CartItem cartItem = cart.getCartList().get(i);
@@ -63,39 +54,39 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public void clearCart(Principal principal){
-        User user = getUserOfPrincipal(principal);
+    public void clearCart(Principal principal) {
+        User user = userService.userForPrincipal(principal);
         Cart cart = cartRepository.findById(user.getCart().getId()).
-                orElseThrow(()-> new NoSuchElementException("Cart not found"));
+                orElseThrow(() -> new NoSuchElementException("Cart not found"));
         List<CartItem> cartItems = cartItemRepository.findAll();
         for (CartItem cartItem : cartItems) {
             Cart itemCart = cartItem.getCart();
             if (itemCart != null && (itemCart.getId().equals(cart.getId()))) {
-                cartItem.setCart(null);
-                cartItemRepository.save(cartItem);
+                cartItemRepository.delete(cartItem);
             }
         }
-        cart.getCartList().clear();
         cart.setFinalPrice(0);
-
-    }
-    public void deleteCartItem(Long cartItemId,Principal principal){
-        User user = getUserOfPrincipal(principal);
-        Cart cart = cartRepository.findById(user.getCart().getId()).
-                orElseThrow(()-> new NoSuchElementException("Cart not found"));
-        CartItem cartItem = cartItemRepository.findById(cartItemId).
-                orElseThrow(()->new NoSuchElementException("CartItem not found"));
-        if(cartItem!=null){
-            cart.setFinalPrice(cart.getFinalPrice()-cartItem.getPrice());
-            cartItemRepository.deleteById(cartItemId);
-        }
         cartRepository.save(cart);
     }
-    public void editQuantity(Long cartItemId,int quantity){
+
+    public void deleteCartItem(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).
-                orElseThrow(()->new NoSuchElementException("CartItem not found"));
+                orElseThrow(() -> new NoSuchElementException("CartItem not found"));
+        Cart cart = cartRepository.findById(cartItem.getCart().getId()).
+                orElseThrow(() -> new NoSuchElementException("Cart not found"));
+        cart.setFinalPrice(cart.getFinalPrice() - cartItem.getPrice());
+        cartItemRepository.deleteById(cartItemId);
+        cartRepository.save(cart);
+    }
+
+    public void editQuantity(Long cartItemId, int quantity) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).
+                orElseThrow(() -> new NoSuchElementException("CartItem not found"));
+        Cart cart = cartItem.getCart();
         cartItem.setQuantity(quantity);
         cartItem.setPrice(cartItem.getQuantity() * cartItem.getProduct().getPrice());
+        cart.setFinalPrice(cart.getCartList().stream().mapToDouble(CartItem::getPrice).sum());
         cartItemRepository.save(cartItem);
+        cartRepository.save(cart);
     }
 }

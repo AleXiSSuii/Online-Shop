@@ -1,6 +1,6 @@
 package onlineshop.shop.service;
 
-
+import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.CartItem;
 import onlineshop.shop.model.Order;
 import onlineshop.shop.model.User;
@@ -8,38 +8,34 @@ import onlineshop.shop.model.enums.StatusOrder;
 import onlineshop.shop.repository.CartItemRepository;
 import onlineshop.shop.repository.OrderRepository;
 import onlineshop.shop.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
-    @Autowired
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, CartItemRepository cartItemRepository) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-        this.cartItemRepository = cartItemRepository;
+    private final CartService cartService;
+    private final ProductService productService;
+    private final EmailService emailService;
+    private final UserService userService;
+
+    public List<Order> orderList(){
+        return orderRepository.findAll();
     }
-    @Autowired
-    private CartService cartService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private EmailService emailService;
-    @Autowired
-    private UserService userService;
+
+    public Order orderGetForId(Long id){
+        return orderRepository.findById(id).orElseThrow();
+    }
 
     public Order confirmOrder(Principal principal){
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         return createOrderForUser(user);
     }
 
@@ -54,7 +50,7 @@ public class OrderService {
 
     @Transactional
     public Order saveOrder(Principal principal){
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         Order order = createOrderForUser(user);
         order.setDate(LocalDateTime.now());
         List<CartItem> cartList = new ArrayList<>(user.getCart().getCartList());
@@ -70,16 +66,8 @@ public class OrderService {
         userRepository.save(user);
         emailService.sendOrderConfirmation(user.getEmail(),order);
         cartService.clearCart(principal);
-        productService.changeQuantity(cartList);
+        productService.checkForChangeQuantity(cartList);
         return order;
-    }
-
-    public List<Order> orderList(){
-        return orderRepository.findAll();
-    }
-
-    public Order orderGetForId(Long id){
-        return orderRepository.findById(id).orElseThrow();
     }
 
     public void changeOrderStatus(Long id,String newStatus){

@@ -1,5 +1,6 @@
 package onlineshop.shop.service;
 
+import lombok.RequiredArgsConstructor;
 import onlineshop.shop.model.Address;
 import onlineshop.shop.model.User;
 import onlineshop.shop.repository.AddressRepository;
@@ -9,21 +10,15 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 
 @Service
+@RequiredArgsConstructor
 public class AddressService {
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
-
-    public AddressService(AddressRepository addressRepository, UserRepository userRepository) {
-        this.addressRepository = addressRepository;
-        this.userRepository = userRepository;
-    }
-    @Autowired
-    private UserService userService;
-
+    private final UserService userService;
 
     public void addAddressToUser(Address address, Principal principal){
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         user.setAddress(address);
         addressRepository.save(address);
         userRepository.save(user);

@@ -245,9 +245,11 @@
                     <input type="hidden" name="cartItem_Id" th:value="${cartItem.id}"/>
                     <div class="quantity-controls" data-max-quantity="${cartItem.product.quantity}">
                         <button type="button" onclick="decreaseQuantity(event)" class="quantity-control-btn">-</button>
-                        <input type="number" name="quantity" th:value="${cartItem.quantity}" min="1"
-                               th:max="${T(java.lang.Integer).parseInt(cartItem.product.quantity)}"
-                               onchange="updateMaxQuantity(this)" class="quantity-input" readonly/>
+                        <label>
+                            <input type="number" name="quantity" th:value="${cartItem.quantity}" min="1"
+                                   th:max="${T(java.lang.Integer).parseInt(cartItem.product.quantity)}"
+                                   onchange="updateMaxQuantity(this)" class="quantity-input" readonly/>
+                        </label>
                         <button type="button" onclick="increaseQuantity(event)" class="quantity-control-btn">+</button>
                     </div>
                 </form>

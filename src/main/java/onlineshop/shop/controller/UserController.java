@@ -68,7 +68,7 @@ public class UserController {
     @GetMapping("/user/changingUserData")
     @PreAuthorize("hasAuthority('developers:order')")
     public String changingUserData(Principal principal,Model model) {
-        model.addAttribute("user", userService.getUserOfPrincipal(principal));
+        model.addAttribute("user", userService.userForPrincipal(principal));
         return "/account/changingUserData";
     }
 
@@ -77,7 +77,7 @@ public class UserController {
         if(bindingResult.hasErrors()){
             return "/account/changingUserData";
         }
-        userService.updateUser(userService.getUserOfPrincipal(principal).getId(), user);
+        userService.updateUser(userService.userForPrincipal(principal).getId(), user);
         return "redirect:/user/changingUserData";
     }
 }

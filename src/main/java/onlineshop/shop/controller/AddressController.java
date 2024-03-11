@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 
 @Controller
@@ -32,8 +31,8 @@ public class AddressController {
 
     @GetMapping("/changingAddressData")
     public String changingAddressData(Principal principal, Model model) {
-        if (userService.getUserOfPrincipal(principal).getAddress() != null) {
-            model.addAttribute("address", userService.getUserOfPrincipal(principal).getAddress());
+        if (userService.userForPrincipal(principal).getAddress() != null) {
+            model.addAttribute("address", userService.userForPrincipal(principal).getAddress());
             return "/account/changingAddressData";
         } else {
             return "redirect:/order/addAddress";
@@ -55,7 +54,7 @@ public class AddressController {
         if (bindingResult.hasErrors()) {
             return "/account/changingAddressData";
         }
-        addressService.updateAddress(userService.getUserOfPrincipal(principal).getAddress(), address);
+        addressService.updateAddress(userService.userForPrincipal(principal).getAddress(), address);
         return "/account/changingAddressData";
     }
 }

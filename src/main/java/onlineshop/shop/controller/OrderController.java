@@ -33,7 +33,7 @@ public class OrderController {
 
     @GetMapping
     public String order(Model model, Principal principal) {
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         if (user.getAddress() != null) {
             model.addAttribute("order", orderService.confirmOrder(principal));
             model.addAttribute("cart", cartService.getCart(user));
@@ -46,14 +46,14 @@ public class OrderController {
     @PostMapping
     public String order(Principal principal, Model model) {
         if (principal != null) {
-            User user = userService.getUserOfPrincipal(principal);
+            User user = userService.userForPrincipal(principal);
             List<CartItem> cartItems = user.getCart().getCartList();
             if (orderService.checkedEmptyOrder(cartItems)) {
                 model.addAttribute("error", "Ваш заказ пустой");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
             }
-            if (!productService.changeQuantity(cartItems)) {
+            if (!productService.checkForChangeQuantity(cartItems)) {
                 model.addAttribute("error", "Такого количество продуктов на данный момент нет на складе");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
@@ -74,7 +74,7 @@ public class OrderController {
 
     @GetMapping("/orderSuccess/{id}")
     public String orderSuccess(@PathVariable Long id, Model model, Principal principal) {
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         if (user.getAddress() != null) {
             model.addAttribute("order", orderService.orderGetForId(id));
             return "orderSuccess";
@@ -85,7 +85,7 @@ public class OrderController {
 
     @GetMapping("/myOrders")
     public String myOrders(Model model, Principal principal) {
-        User user = userService.getUserOfPrincipal(principal);
+        User user = userService.userForPrincipal(principal);
         model.addAttribute("user", user);
         model.addAttribute("orders", user.getOrders());
         return "/account/myOrders";

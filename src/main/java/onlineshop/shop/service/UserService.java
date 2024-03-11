@@ -20,8 +20,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public List<User> allUsers() {
-
         return userRepository.findAll();
+    }
+    public User userForId(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
+    }
+    public User userForPrincipal(Principal principal){
+        return userRepository.findByEmail(principal.getName());
     }
 
     public void updateUser(Long id, User user) {
@@ -59,11 +64,4 @@ public class UserService {
             userRepository.save(user);
         }
     }
-    public User userForId(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
-    }
-    public User getUserOfPrincipal(Principal principal){
-        return userRepository.findByEmail(principal.getName());
-    }
-
 }
