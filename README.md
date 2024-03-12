@@ -9,4 +9,4 @@
 * Lombok
 * HTML,CSS
 ## О проекте:
-<img src="screenshots/DBScheme/png">
+<img src="screenshots/DBScheme.PNG">
