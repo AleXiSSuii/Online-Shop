@@ -1,3 +1,4 @@
+
 --add products
 INSERT INTO product(id,name,description,price,category_id,quantity)
 VALUES (1, 'Продукт1','Описание1',100,10,1,3);

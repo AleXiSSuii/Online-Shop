@@ -11,10 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-
-
 import java.util.Optional;
-
 import static onlineshop.shop.util.TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;

@@ -14,6 +14,7 @@ public class TestConstants {
     public static final Integer ORDER_POST_INDEX = 1111111;
     public static final Double ORDER_TOTAL_PRICE = 56.0;
 
+
     public static final Long PRODUCT_ID = 1L;
     public static final String PRODUCT_NAME = "NAME";
     public static final String PRODUCT_DESCRIPTION = "DESCRIPTION";

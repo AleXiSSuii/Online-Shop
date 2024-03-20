@@ -1,3 +1,4 @@
+
 --admin Password: admin
 insert into users (email, number,lastname,name ,password, role,status)
 values (1,'admin@mail.com', 000000,'admin','admin','$2y$12$xkiMqoqksiS2VnFW7D8VU.5ez05LcWj0loiD1vpfsl0SVF3yhU4u2', 'ADMIN','ACTIVE');
