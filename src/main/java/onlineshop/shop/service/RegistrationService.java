@@ -30,7 +30,6 @@ public class RegistrationService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
-        user.setStatus(Status.NOTACTIVATE);
         user.setActivationCode(UUID.randomUUID().toString());
         if(!user.getEmail().isEmpty()){
             String message = String.format(
