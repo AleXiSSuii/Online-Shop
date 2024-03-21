@@ -21,4 +21,11 @@ public class TestConstants {
     public static final Double PRODUCT_PRICE = 111.1;
     public static final Integer PRODUCT_QUANTITY = 11;
     public static final List<ProductImage> PRODUCT_IMAGES = List.of(new ProductImage(),new ProductImage(),new ProductImage());
+
+    public static final Long USER_ID = 1L;
+    public static final String USER_NAME = "User";
+    public static final String USER_LASTNAME = "User";
+    public static final String USER_EMAIL = "user@mail.com";
+    public static final String USER_NUMBER = "12345678";
+    public static final String USER_PASSWORD = "123";
 }
