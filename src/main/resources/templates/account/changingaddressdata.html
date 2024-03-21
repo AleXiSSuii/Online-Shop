@@ -64,16 +64,13 @@
             justify-content: space-between;
             margin-bottom: 10px;
         }
-
         .input-row div {
             width: 48%;
         }
-
         .button-row {
             display: flex;
             justify-content: center;
         }
-
         .registration-form input[type="email"],
         .registration-form input[type="text"],
         .registration-form input[type="tel"],
@@ -85,7 +82,6 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-
         .registration-form input[type="submit"] {
             color: white;
             background-color: #5cabff;
@@ -94,7 +90,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         .registration-form input[type="submit"]:hover {
             background-color: #4a95e4;
         }.menu {
@@ -104,7 +99,6 @@
             font-weight: bold;
             margin-top: 50px;
             margin-bottom: 20px;
-            
         }
         .menu a {
 
@@ -113,7 +107,6 @@
             color: #5cabff;
             text-decoration: none;
             font-size: 20px;
-        
         }
     </style>
 </head>
@@ -124,7 +117,8 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
+           th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
            th:href="@{/cart}" th:text="'Корзина'">Корзина</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
@@ -139,7 +133,8 @@
 </div>
 <div class="menu">Измените адресные данные</div>
 <div class="form-container">
-    <form th:method="PATCH" th:action="@{/address/changingAddressData}" class="registration-form" th:object="${address}">
+    <form th:method="PATCH" th:action="@{/address/changingAddressData}" class="registration-form"
+          th:object="${address}">
         <div class="input-row">
             <div>
                 <input type="text" th:field="*{state}" placeholder="Область" id="state"/>
@@ -157,21 +152,26 @@
             </div>
             <div>
                 <input type="text" th:field="*{building}" placeholder="Номер дома" id="building"/>
-                <div style="color:red" th:if="${#fields.hasErrors('building')}" th:errors="*{building}">Building error</div>
+                <div style="color:red" th:if="${#fields.hasErrors('building')}" th:errors="*{building}">Building error
+                </div>
             </div>
         </div>
         <div class="input-row">
             <div>
                 <input type="text" th:field="*{apartment}" placeholder="Квартира" id="apartment"/>
-                <div style="color:red" th:if="${#fields.hasErrors('apartment')}" th:errors="*{apartment}">Apartment error</div>
+                <div style="color:red" th:if="${#fields.hasErrors('apartment')}" th:errors="*{apartment}">Apartment
+                    error
+                </div>
             </div>
             <div>
                 <input type="text" th:field="*{postalCode}" placeholder="Индекс" id="postalCode"/>
-                <div style="color:red" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">postalCode error</div>
+                <div style="color:red" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">postalCode
+                    error
+                </div>
             </div>
         </div>
         <div class="button-row">
-            <input type="submit" value="Изменить данные" />
+            <input type="submit" value="Изменить данные"/>
         </div>
     </form>
 </div>

@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Edit product</title>
-  <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-    .header-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #1E90FF;
-        color: white;
-        padding: 10px 20px;
-    }
-    .header-title {
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .auth-links a {
-        color: white;
-        text-decoration: none;
-        padding: 5px 10px;
-        margin-left: 10px;
-        border: 2px solid white;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }.auth-links {
-        display: flex;
-        justify-content: flex-end;
-    }
-    .header-title {
-        font-size: 24px;
-        font-weight: bold;
-    }
-    .header-title a {
-        text-decoration: none;
-        color: white;
-        cursor: pointer;
-    }
-    .header-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #5cabff;
-        color: rgb(255, 255, 255);
-        padding: 10px 20px;
-    }.logout-form {
-        display: inline-flex;
-        align-items: center;
-        margin-left: auto;
-    }
-</style>
+    <meta charset="UTF-8">
+    <title>Edit product</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E90FF;
+            color: white;
+            padding: 10px 20px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }.auth-links {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .header-title a {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #5cabff;
+            color: rgb(255, 255, 255);
+            padding: 10px 20px;
+        }.logout-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="header-bar">
-<div class="header-title">
-    <a href="/home" class="header-title-link">Мыльный кураж</a>
-</div>
-<div class="auth-links">
-    <a th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-    <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
-        <form action="/logout" method="POST" style="display:inline;">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
-        </form>
+    <div class="header-title">
+        <a href="/home" class="header-title-link">Мыльный кураж</a>
     </div>
-</div>
+    <div class="auth-links">
+        <a th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
+        <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
+            <form action="/logout" method="POST" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <a href="javascript:;" onclick="parentNode.submit();">Выйти</a>
+            </form>
+        </div>
+    </div>
 </div>
 <div style="text-align: center; margin-top: 20px;">
     <h3 style="font-family: Arial, sans-serif; font-size: 24px;">Редактировать категорию</h3>
@@ -83,7 +83,7 @@
         <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
             <input type="submit" value="СОХРАНИТЬ" style="background-color: #1E90FF; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; width: 120px;">
         </div>
-      </form>
+    </form>
 </div>
 </body>
 </html>
