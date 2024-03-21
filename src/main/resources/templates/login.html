@@ -68,7 +68,6 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
-
         .modal-content {
             background-color: #fefefe;
             margin: 10% auto;
@@ -79,7 +78,6 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
-
         .close {
             color: #aaa;
             float: right;
@@ -87,7 +85,6 @@
             font-weight: bold;
             cursor: pointer;
         }
-
         .close:hover,
         .close:focus {
             color: black;
@@ -122,27 +119,17 @@
     var modal = document.getElementById("myModal");
     var modalText = document.getElementById("modal-text");
     var span = document.getElementsByClassName("close")[0];
-
-    // Открываем модальное окно
     modal.style.display = "block";
-
-    // Закрываем модальное окно при клике на крестик
     span.onclick = function() {
         modal.style.display = "none";
     }
-
-    // Закрываем модальное окно при клике вне его области
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
     }
-
-    // Устанавливаем текст в модальном окне
     var successMessage = "Активация прошла успешно";
     var errorMessage = "Произошла ошибка во время активации";
-
-    // Проверяем успешность активации и устанавливаем соответствующий текст
     if ("${Success}") {
         modalText.innerText = successMessage;
     } else if ("${Error}") {

@@ -269,13 +269,11 @@
                         updateForm(event);
                     }
                 }
-
                 function updateMaxQuantity(input) {
                     const quantityControls = input.closest('.quantity-controls');
                     const maxQuantity = quantityControls.getAttribute('data-max-quantity');
                     input.setAttribute('max', maxQuantity);
                 }
-
                 function increaseQuantity(event) {
                     const quantityInput = event.target.closest('.product-container').querySelector('input[name="quantity"]');
                     let quantity = parseInt(quantityInput.value);
@@ -286,7 +284,6 @@
                         updateForm(event);
                     }
                 }
-
                 function updateForm(event) {
                     const form = event.target.closest('form');
                     form.submit();

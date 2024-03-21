@@ -25,9 +25,9 @@
             font-weight: bold;
         }
         .header-title a {
-        text-decoration: none;
-        color: white;
-        cursor: pointer;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
         }
         .header-bar {
             display: flex;
@@ -45,7 +45,6 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -54,44 +53,36 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         h2 {
             color: #333;
             text-align: center;
         }
-
         h3 {
             color: #4CAF50;
             text-align: center;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
-
         th {
             background-color: #f2f2f2;
         }
-
         p {
             margin: 5px 0;
         }
-
         .success-message {
             color: #4CAF50;
             text-align: center;
             font-size: 1.2em;
         }.price{
-        
-            font-size: 20px; 
+            font-size: 20px;
         }
     </style>
 </head>
@@ -102,7 +93,8 @@
     </div>
     <div class="auth-links">
         <a th:if="${isAdmin != null && isAdmin}" th:href="@{/admin}" th:text="'Admin menu'">Admin menu</a>
-        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}" th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
+        <a th:if="${#authorization.expression('isAuthenticated()') and !(isAdmin != null && isAdmin)}"
+           th:href="@{/user/getAccount}" th:text="'Личный кабинет'">Личный кабинет</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/login}">Войти</a>
         <a th:if="${#authorization.expression('!isAuthenticated')}" th:href="@{/registration}">Зарегистрироваться</a>
         <div class="logout-form" th:if="${#authorization.expression('isAuthenticated()')}">
@@ -137,7 +129,6 @@
     <div class="price">
         <p>Итоговая цена заказа <span th:text="${order.totalPrice + ' руб'}">Total Price</span></p>
     </div>
-    
 </div>
 <h3 class="success-message">Заказ принят в обработку</h3>
 </body>

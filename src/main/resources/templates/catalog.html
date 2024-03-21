@@ -41,16 +41,16 @@
             transition: background-color 0.3s;
         }.auth-links {
             display: flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
         }
         .header-title {
             font-size: 24px;
             font-weight: bold;
         }
         .header-title a {
-        text-decoration: none;
-        color: white;
-        cursor: pointer;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
         }
         .header-bar {
             display: flex;
@@ -110,13 +110,12 @@
             border-radius: 0 5px 5px 0;
             transition: background 0.3s;
         }.search-form button:hover {
-            background: #0a6cad;      
+            background: #0a6cad;
         }#category-select {
             display: flex;
             justify-content: right;
             margin: 20px;
         }
-
         #category-select select {
             padding: 10px;
             font-size: 16px;
@@ -127,11 +126,9 @@
             transition: box-shadow 0.3s;
             width: 65%;
         }
-
         #category-select select:focus {
             box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
-
         #category-select button {
             padding: 10px;
             font-size: 16px;
@@ -143,7 +140,6 @@
             transition: background 0.3s;
             width: 33%;
         }
-
         #category-select button:hover {
             background: #0a6cad;
         }#category-and-search {
@@ -165,7 +161,7 @@
         }.product-availability {
             font-size: 14px;
             color: #999;
-            }
+        }
     </style>
 </head>
 <body>
@@ -206,7 +202,6 @@
             <button type="submit">Фильтр</button>
         </form>
     </div>
-    
 </div>
 <hr>
 <div class="products-container">
@@ -218,7 +213,6 @@
             <p class="product-availability" th:text="${product.quantity <= 0 ? 'Нет в наличии' : 'В наличии: ' + product.quantity}">Product Info</p>
         </div>
     </a>
-
 </div>
 <br/>
 </body>
