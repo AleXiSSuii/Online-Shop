@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 
@@ -26,7 +27,6 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-
         return "login";
     }
 
@@ -44,7 +44,8 @@ public class UserController {
             model.addAttribute("error", "Пользователь с таким email уже существует.");
             return "registration";
         }
-        return "login";
+        model.addAttribute("user", user);
+        return "redirect:/login";
     }
 
     @GetMapping("/activate/{code}")
