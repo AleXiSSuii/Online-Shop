@@ -13,8 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
-@Service
+
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class RegistrationService {
     private final UserRepository userRepository;
@@ -30,6 +31,7 @@ public class RegistrationService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
+        user.setStatus(Status.NOTACTIVATE);
         user.setActivationCode(UUID.randomUUID().toString());
         if(!user.getEmail().isEmpty()){
             String message = String.format(
