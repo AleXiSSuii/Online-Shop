@@ -23,6 +23,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -148,7 +149,20 @@ class UserControllerTest {
     }
 
     @Test
-    void testChangingUserData() {
+    @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
 
+    void testChangingUserData() throws Exception {
+        User user = User.builder()
+                .email("e@m.com")
+                .name("test")
+                .lastname("test")
+                .number("1234567")
+                .build();
+        mockMvc.perform(formLogin().user(USER_EMAIL1).password(USER_PASSWORD))
+                .andExpect(authenticated());
+        mockMvc.perform(patch("/user/changingUserData")
+                        .with(csrf())
+                        .flashAttr("user",user))
+                .andExpect(status().is3xxRedirection());
     }
 }
