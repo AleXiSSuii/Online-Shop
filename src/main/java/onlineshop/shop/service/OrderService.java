@@ -42,8 +42,7 @@ public class OrderService {
     private Order createOrderForUser(User user) {
         Order order = new Order();
         order.setUser(user);
-        List<CartItem> cartListCopy = new ArrayList<>(user.getCart().getCartList());
-        order.setCartList(cartListCopy);
+        order.setCartList(user.getCart().getCartList());
         order.setTotalPrice(user.getCart().getFinalPrice());
         return order;
     }
@@ -66,7 +65,6 @@ public class OrderService {
         userRepository.save(user);
         emailService.sendOrderConfirmation(user.getEmail(),order);
         cartService.clearCart(principal);
-        productService.checkForChangeQuantity(cartList);
         return order;
     }
 
@@ -77,6 +75,7 @@ public class OrderService {
     }
     public boolean checkedQuantity(List<CartItem> cart){
         for (CartItem cartItem : cart) {
+
             if (cartItem.getQuantity() > cartItem.getProduct().getQuantity()) {
                 return false;
             }

@@ -1,19 +1,18 @@
 package onlineshop.shop.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import onlineshop.shop.model.enums.StatusOrder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@Data
-@Entity
-@Table(name = "orders")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

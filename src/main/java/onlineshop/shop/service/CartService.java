@@ -60,11 +60,14 @@ public class CartService {
                 orElseThrow(() -> new NoSuchElementException("Cart not found"));
         List<CartItem> cartItems = cartItemRepository.findAll();
         for (CartItem cartItem : cartItems) {
-            Cart itemCart = cartItem.getCart();
-            if (itemCart != null && (itemCart.getId().equals(cart.getId()))) {
-                cartItemRepository.delete(cartItem);
+            if(cartItem.getCart() != null){
+                if (cartItem.getCart().getId().equals(cart.getId())) {
+                    cartItem.setCart(null);
+                    cartItemRepository.save(cartItem);
+                }
             }
         }
+        cart.getCartList().clear();
         cart.setFinalPrice(0);
         cartRepository.save(cart);
     }

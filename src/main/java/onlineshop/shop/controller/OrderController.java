@@ -53,20 +53,21 @@ public class OrderController {
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
             }
-            if (!productService.checkForChangeQuantity(cartItems)) {
-                model.addAttribute("error", "Такого количество продуктов на данный момент нет на складе");
-                model.addAttribute("order", orderService.confirmOrder(principal));
-                return "order";
-            }
-            if (orderService.checkedQuantity(cartItems)) {
-                Order order = orderService.saveOrder(principal);
-                return "redirect:/order/orderSuccess/" + order.getId();
-            } else {
+            if (!orderService.checkedQuantity(cartItems)) {
                 model.addAttribute("error", "На складе нет такого количества товара.");
                 model.addAttribute("order", orderService.confirmOrder(principal));
                 return "order";
             }
+            if (productService.checkForChangeQuantity(cartItems)) {
+                Order order = orderService.saveOrder(principal);
+                return "redirect:/order/orderSuccess/" + order.getId();
 
+            }
+            else{
+                model.addAttribute("error", "Такого количество продуктов на данный момент нет на складе");
+                model.addAttribute("order", orderService.confirmOrder(principal));
+                return "order";
+            }
         } else {
             throw new UsernameNotFoundException("User is not authorize");
         }
@@ -90,6 +91,5 @@ public class OrderController {
         model.addAttribute("orders", user.getOrders());
         return "/account/myOrders";
     }
-
 }
 

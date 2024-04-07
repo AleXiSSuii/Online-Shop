@@ -141,8 +141,8 @@ class UserControllerTest {
                 .andExpect(authenticated());
         mockMvc.perform(get("/user/changingUserData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/account/changingUserData")).andExpect(model()
-                        .attribute("user", hasProperty("email", is("user@mail.com"))))
+                .andExpect(view().name("/account/changingUserData"))
+                .andExpect(model().attribute("user", hasProperty("email", is("user@mail.com"))))
                 .andExpect(model().attribute("user", hasProperty("name", is("User"))))
                 .andExpect(model().attribute("user", hasProperty("lastname", is("User"))))
                 .andExpect(model().attribute("user", hasProperty("number", is("12345678"))));
@@ -150,7 +150,6 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
-
     void testChangingUserData() throws Exception {
         User user = User.builder()
                 .email("e@m.com")

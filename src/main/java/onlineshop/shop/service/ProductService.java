@@ -9,6 +9,7 @@ import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductImageRepository;
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductImageRepository imageRepository;
+
 
     public void createProduct(Product product,
                               MultipartFile file1,
@@ -51,6 +53,7 @@ public class ProductService {
     }
 
     public List<Product> allProducts() {
+
         return productRepository.findAll();
     }
 
@@ -123,7 +126,6 @@ public class ProductService {
         updateCategory.setName(category.getName());
         categoryRepository.save(updateCategory);
     }
-
     public boolean checkForChangeQuantity(List<CartItem> cartList) {
         for (CartItem cartItem : cartList) {
             Product product = cartItem.getProduct();
