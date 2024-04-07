@@ -157,19 +157,19 @@ class ProductServiceTest {
         assertThat(category1.getName()).isEqualTo("category2");
     }
 
-//    @Test
-//    void checkIfQuantityProductMoreThanCartItem() {
-//        List<CartItem> cartItems = List.of(new CartItem(1L,3,600,product1,null,null));
-//
-//        boolean result = productService.checkForChangeQuantity(cartItems);
-//        assertThat(result).isEqualTo(true);
-//    }
-//    @Test
-//    void checkIfQuantityProductLessThanCartItem() {
-//        List<CartItem> cartItems = List.of(
-//                new CartItem(1L,3,600,product1,null,null),
-//                new CartItem(2L,11,400,product2,null,null));
-//        boolean result = productService.checkForChangeQuantity(cartItems);
-//        assertThat(result).isEqualTo(false);
-//    }
+    @Test
+    void checkIfQuantityProductMoreThanCartItem() {
+        List<CartItem> cartItems = List.of(new CartItem(1L,3,600,product1,null,null));
+
+        boolean result = productService.checkForChangeQuantity(cartItems);
+        assertThat(result).isEqualTo(true);
+    }
+    @Test
+    void checkIfQuantityProductLessThanCartItem() {
+        List<CartItem> cartItems = List.of(
+                new CartItem(1L,3,600,product1,null,null),
+                new CartItem(2L,11,400,product2,null,null));
+        boolean result = productService.checkForChangeQuantity(cartItems);
+        assertThat(result).isEqualTo(false);
+    }
 }

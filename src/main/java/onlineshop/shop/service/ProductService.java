@@ -9,7 +9,6 @@ import onlineshop.shop.repository.CategoryRepository;
 import onlineshop.shop.repository.ProductImageRepository;
 import onlineshop.shop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

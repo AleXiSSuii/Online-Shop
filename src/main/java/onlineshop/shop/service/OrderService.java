@@ -10,6 +10,7 @@ import onlineshop.shop.repository.OrderRepository;
 import onlineshop.shop.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +23,6 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
     private final CartService cartService;
-    private final ProductService productService;
     private final EmailService emailService;
     private final UserService userService;
 

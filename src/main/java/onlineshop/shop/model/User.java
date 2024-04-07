@@ -1,14 +1,12 @@
 package onlineshop.shop.model;
 
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import onlineshop.shop.model.enums.Role;
 import onlineshop.shop.model.enums.Status;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.util.List;
 
