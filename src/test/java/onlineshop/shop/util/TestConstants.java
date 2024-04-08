@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TestConstants {
 
-    public static final Long ORDER_ID = 1L;
+    public static final Long ID = 1L;
     public static final String ORDER_STATE = "Moscow";
     public static final String ORDER_CITY = "Moscow";
     public static final String ORDER_STREET = "Arbat";
@@ -25,8 +25,8 @@ public class TestConstants {
     public static final Long PRODUCT_ID = 1L;
     public static final String PRODUCT_NAME = "NAME";
     public static final String PRODUCT_DESCRIPTION = "DESCRIPTION";
-    public static final Double PRODUCT_PRICE = 111.1;
-    public static final Integer PRODUCT_QUANTITY = 11;
+    public static final Double PRODUCT_PRICE = 1000.0;
+    public static final Integer PRODUCT_QUANTITY = 10;
     public static final List<ProductImage> PRODUCT_IMAGES = List.of(new ProductImage(),new ProductImage(),new ProductImage());
 
     public static final String USER_EMAIL1 = "user@mail.com";

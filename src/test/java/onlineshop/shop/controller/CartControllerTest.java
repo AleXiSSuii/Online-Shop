@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 
@@ -20,8 +21,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -38,24 +38,24 @@ class CartControllerTest {
 
     @Test
     @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
-    void getCart() throws Exception {
+    void checkPageGetCart() throws Exception {
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(USER_EMAIL1);
 
         mockMvc.perform(formLogin().user(USER_EMAIL1).password(USER_PASSWORD))
                 .andExpect(authenticated());
         mockMvc.perform(get("/cart")
-                .principal(principal))
+                        .principal(principal))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cart"));
 
-        Cart cart = cartRepository.findById(1L).orElseThrow();
+        Cart cart = cartRepository.findById(ID).orElseThrow();
         assertThat(cart.getFinalPrice()).isEqualTo(ORDER_TOTAL_PRICE);
     }
 
     @Test
     @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
-    void addProductToCart() throws Exception {
+    void checkAddNewProductToCart() throws Exception {
         Principal principal = mock(Principal.class);
         when(principal.getName()).thenReturn(USER_EMAIL1);
 
@@ -68,16 +68,48 @@ class CartControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/cart"));
 
-        Cart cart = cartRepository.findById(1L).orElseThrow();
-        assertThat(cart.getFinalPrice()).isEqualTo(ORDER_TOTAL_PRICE+1000.0);
+        Cart cart = cartRepository.findById(ID).orElseThrow();
+        assertThat(cart.getFinalPrice()).isEqualTo(ORDER_TOTAL_PRICE + 1000.0);
     }
 
     @Test
-    void clearCart() {
+    @Transactional
+    @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
+    void checkClearCartMethod() throws Exception {
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn(USER_EMAIL1);
+
+        mockMvc.perform(formLogin().user(USER_EMAIL1).password(USER_PASSWORD))
+                .andExpect(authenticated());
+        mockMvc.perform(delete("/cart/clear")
+                        .principal(principal)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/cart"));
+
+        Cart cart = cartRepository.findById(ID).orElseThrow();
+        assertThat(cart.getFinalPrice()).isEqualTo(0);
+        assertThat(cart.getCartList().size()).isEqualTo(0);
     }
 
     @Test
-    void deleteCartItem() {
+    @Transactional
+    @WithMockUser(username = USER_EMAIL1, password = USER_PASSWORD)
+    void deleteCartItem() throws Exception {
+        Principal principal = mock(Principal.class);
+        when(principal.getName()).thenReturn(USER_EMAIL1);
+
+        mockMvc.perform(formLogin().user(USER_EMAIL1).password(USER_PASSWORD))
+                .andExpect(authenticated());
+        mockMvc.perform(delete("/cart/deleteItem")
+                        .param("cartItem_Id", "1")
+                        .principal(principal)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/cart"));
+
+        Cart cart = cartRepository.findById(ID).orElseThrow();
+        assertThat(cart.getFinalPrice()).isEqualTo(ORDER_TOTAL_PRICE-300);
     }
 
     @Test
