@@ -27,12 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
-@Sql(value = {"/sql/order.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/sql/sql_insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class OrderControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
 
     @Test
     @Transactional

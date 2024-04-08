@@ -2,6 +2,8 @@ INSERT INTO product (name,description,price,quantity)
 VALUES ('Продукт1','Описание1',100.0,5);
 INSERT INTO product (name,description,price,quantity)
 VALUES ('Продукт2','Описание2',200.0,10);
+INSERT INTO product (name,description,price,quantity)
+VALUES ('Продукт3','Описание3',1000.0,10);
 
 INSERT INTO cart (final_price)
 VALUES (900);
